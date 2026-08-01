@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --altin-gold: #F5A623;
+    --altin-amber: #FBAA12;
+    --altin-orange: #F26422;
+    --altin-dark: #18181B;
+  }
+
+  body {
+    background-color: #f3f4f8;
+    color: #0f172a;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Brand Utilities for High Contrast Light Luxury Theme */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, #F5A623 0%, #F26422 100%);
+}
+
+.bg-brand-gradient-hover:hover {
+  background: linear-gradient(135deg, #FBAA12 0%, #E05312 100%);
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, #D97706 0%, #EA580C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: #F5A623;
+  box-shadow: 0 16px 32px -8px rgba(242, 100, 34, 0.18);
+}
+
+.glass-panel-interactive {
+  background: #ffffff;
+  border: 2px solid #fed7aa;
+  box-shadow: 0 12px 36px -8px rgba(245, 166, 35, 0.18);
+}
+
+.hashtag-badge {
+  background: #fff7ed;
+  border: 1.5px solid #fdba74;
+  color: #c2410c;
+  font-weight: 800;
+}
+
+.campus-badge {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F5A623;
+}

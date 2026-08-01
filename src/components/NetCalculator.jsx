@@ -115,42 +115,42 @@ export default function NetCalculator({ onOpenApplyModal }) {
   const currentResult = getRankByYear(selectedYear);
 
   return (
-    <div className="bg-white border-2 border-amber-300 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+    <div className="bg-white border-2 border-amber-300/80 rounded-3xl p-5 md:p-8 shadow-xl relative overflow-hidden">
       {/* Decorative Background Orbs */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-[#F5A623]/10 blur-3xl pointer-events-none rounded-full" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#F26422]/10 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-0 right-0 w-80 h-80 bg-[#F5A623]/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#F26422]/8 blur-3xl pointer-events-none rounded-full" />
 
       <div className="relative z-10 space-y-6">
 
         {/* Top Header Banner */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-slate-100 pb-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black hashtag-badge mb-2">
               <Calculator className="w-3.5 h-3.5 text-[#F26422]" />
               <span>YKS 2018 - 2026 Tam Veri Simülatörü</span>
             </div>
             <h3 className="text-2xl md:text-3xl font-black text-slate-900">
-              Anlık Netlerini Gir, <span className="text-gradient-brand">Yıllara Göre Sıralamanı Gör (2018-2026)</span>
+              Anlık Netlerini Gir, <span className="text-gradient-brand">Tüm Yılların Sıralamasını Gör (2018-2026)</span>
             </h3>
-            <p className="text-xs text-slate-600 font-extrabold mt-1 flex items-center gap-1.5">
+            <p className="text-xs text-slate-600 font-bold mt-1 flex items-center gap-1.5">
               <Info className="w-4 h-4 text-blue-600 shrink-0" />
-              <span>2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ve 2026 resmi ÖSYM katsayıları ve yığılım verileri ile hesaplanmaktadır.</span>
+              <span>2018 - 2026 resmi ÖSYM katsayıları ve yığılım verileri ile hesaplanmaktadır.</span>
             </p>
           </div>
 
           {/* Track selector */}
-          <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-300 shrink-0">
+          <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 shrink-0">
             {[
-              { id: 'SAY', label: 'Sayısal (SAY)' },
-              { id: 'EA', label: 'Eşit Ağırlık (EA)' },
-              { id: 'SOZ', label: 'Sözel (SÖZ)' },
+              { id: 'SAY', label: 'Sayısal' },
+              { id: 'EA', label: 'Eşit Ağırlık' },
+              { id: 'SOZ', label: 'Sözel' },
             ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => setTrack(item.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                className={`px-3 py-2 sm:px-4 text-xs font-black rounded-xl transition-all ${
                   track === item.id
-                    ? 'bg-brand-gradient text-slate-950 shadow-md'
+                    ? 'bg-brand-gradient text-slate-950 shadow-xs'
                     : 'text-slate-700 hover:text-slate-950'
                 }`}
               >
@@ -161,27 +161,27 @@ export default function NetCalculator({ onOpenApplyModal }) {
         </div>
 
         {/* MAIN CALCULATOR GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           
           {/* LEFT SIDE: NET INPUTS & ACTION BUTTON (6 cols) */}
-          <div className="lg:col-span-6 space-y-6 flex flex-col justify-between">
+          <div className="lg:col-span-6 space-y-5 flex flex-col justify-between">
             
-            <div className="space-y-6">
+            <div className="space-y-5">
               {/* TYT Section */}
-              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-xs">
-                <div className="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
-                  <span className="font-black text-[#D97706] text-sm flex items-center gap-2">
+              <div className="bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200">
+                <div className="flex items-center justify-between mb-3 border-b border-slate-200 pb-2.5">
+                  <span className="font-black text-[#D97706] text-xs sm:text-sm flex items-center gap-1.5">
                     <CheckSquare className="w-4 h-4" />
                     TYT Ders Netleri (120 Soru)
                   </span>
-                  <span className="text-xs font-black px-3 py-1 bg-white border border-slate-300 text-slate-900 rounded-lg shadow-xs">
-                    Toplam TYT: <strong className="text-[#D97706] text-sm">{tytTotalNet}</strong> Net
+                  <span className="text-xs font-black px-2.5 py-1 bg-white border border-slate-200 text-slate-900 rounded-lg shadow-xs">
+                    TYT: <strong className="text-[#D97706]">{tytTotalNet}</strong> Net
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
                       Türkçe (40 S)
                     </label>
                     <input
@@ -191,11 +191,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                       max="40"
                       value={nets.tytTurkce}
                       onChange={(e) => handleNetChange('tytTurkce', e.target.value)}
-                      className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
                       Sosyal (20 S)
                     </label>
                     <input
@@ -205,11 +205,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                       max="20"
                       value={nets.tytSosyal}
                       onChange={(e) => handleNetChange('tytSosyal', e.target.value)}
-                      className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
                       Temel Mat (40 S)
                     </label>
                     <input
@@ -219,11 +219,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                       max="40"
                       value={nets.tytMatematik}
                       onChange={(e) => handleNetChange('tytMatematik', e.target.value)}
-                      className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
                       Fen Bil. (20 S)
                     </label>
                     <input
@@ -233,28 +233,28 @@ export default function NetCalculator({ onOpenApplyModal }) {
                       max="20"
                       value={nets.tytFen}
                       onChange={(e) => handleNetChange('tytFen', e.target.value)}
-                      className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
+                      className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F5A623] outline-none"
                     />
                   </div>
                 </div>
               </div>
 
               {/* AYT Section */}
-              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-xs">
-                <div className="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
-                  <span className="font-black text-[#F26422] text-sm flex items-center gap-2">
+              <div className="bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200">
+                <div className="flex items-center justify-between mb-3 border-b border-slate-200 pb-2.5">
+                  <span className="font-black text-[#F26422] text-xs sm:text-sm flex items-center gap-1.5">
                     <TrendingUp className="w-4 h-4" />
-                    AYT ({track}) Ders Netleri (80 Soru)
+                    AYT ({track}) Netleri (80 Soru)
                   </span>
-                  <span className="text-xs font-black px-3 py-1 bg-white border border-slate-300 text-slate-900 rounded-lg shadow-xs">
-                    Toplam AYT: <strong className="text-[#F26422] text-sm">{aytTotalNet}</strong> Net
+                  <span className="text-xs font-black px-2.5 py-1 bg-white border border-slate-200 text-slate-900 rounded-lg shadow-xs">
+                    AYT: <strong className="text-[#F26422]">{aytTotalNet}</strong> Net
                   </span>
                 </div>
 
                 {track === 'SAY' && (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         AYT Mat (40 S)
                       </label>
                       <input
@@ -264,11 +264,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="40"
                         value={nets.aytMatematik}
                         onChange={(e) => handleNetChange('aytMatematik', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Fizik (14 S)
                       </label>
                       <input
@@ -278,11 +278,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="14"
                         value={nets.aytFizik}
                         onChange={(e) => handleNetChange('aytFizik', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Kimya (13 S)
                       </label>
                       <input
@@ -292,11 +292,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="13"
                         value={nets.aytKimya}
                         onChange={(e) => handleNetChange('aytKimya', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Biyoloji (13 S)
                       </label>
                       <input
@@ -306,16 +306,16 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="13"
                         value={nets.aytBiyoloji}
                         onChange={(e) => handleNetChange('aytBiyoloji', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                   </div>
                 )}
 
                 {track === 'EA' && (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         AYT Mat (40 S)
                       </label>
                       <input
@@ -325,11 +325,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="40"
                         value={nets.aytMatematik}
                         onChange={(e) => handleNetChange('aytMatematik', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Td. Edebiyatı (24 S)
                       </label>
                       <input
@@ -339,11 +339,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="24"
                         value={nets.aytEdebiyat}
                         onChange={(e) => handleNetChange('aytEdebiyat', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Tarih-1 (10 S)
                       </label>
                       <input
@@ -353,11 +353,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="10"
                         value={nets.aytTarih1}
                         onChange={(e) => handleNetChange('aytTarih1', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Coğrafya-1 (6 S)
                       </label>
                       <input
@@ -367,16 +367,16 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="6"
                         value={nets.aytCografya1}
                         onChange={(e) => handleNetChange('aytCografya1', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                   </div>
                 )}
 
                 {track === 'SOZ' && (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Td. Edebiyatı (24 S)
                       </label>
                       <input
@@ -386,11 +386,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="24"
                         value={nets.aytEdebiyat}
                         onChange={(e) => handleNetChange('aytEdebiyat', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Tarih-1 (10 S)
                       </label>
                       <input
@@ -400,11 +400,11 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="10"
                         value={nets.aytTarih1}
                         onChange={(e) => handleNetChange('aytTarih1', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-extrabold text-slate-700 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
                         Coğrafya-1 (6 S)
                       </label>
                       <input
@@ -414,7 +414,7 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         max="6"
                         value={nets.aytCografya1}
                         onChange={(e) => handleNetChange('aytCografya1', e.target.value)}
-                        className="w-full bg-white border-2 border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-black focus:border-[#F26422] outline-none"
                       />
                     </div>
                   </div>
@@ -425,34 +425,34 @@ export default function NetCalculator({ onOpenApplyModal }) {
             {/* ACTION BUTTON ON THE LEFT SIDE */}
             <button
               onClick={onOpenApplyModal}
-              className="w-full flex items-center justify-center gap-3 bg-brand-gradient bg-brand-gradient-hover text-slate-950 font-black px-6 py-4 rounded-2xl text-base transition-all duration-300 shadow-xl shadow-orange-500/25 hover:scale-[1.02] mt-4"
+              className="w-full flex items-center justify-center gap-2.5 bg-brand-gradient bg-brand-gradient-hover text-slate-950 font-black px-6 py-4 rounded-2xl text-sm transition-all duration-200 shadow-lg shadow-orange-500/20 hover:scale-[1.01] mt-3"
             >
               <span>Bu Netler İle Koçluk Planı İstiyorum</span>
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4" />
             </button>
           </div>
 
           {/* RIGHT SIDE: RESULT CARDS & FULL 2018-2026 COMPARISON TABLE (6 cols) */}
           <div className="lg:col-span-6 space-y-5">
-            <div className="bg-amber-50/70 p-6 rounded-3xl border-2 border-amber-300 shadow-xl space-y-5">
+            <div className="bg-amber-50/60 p-5 sm:p-6 rounded-3xl border border-amber-300/80 shadow-md space-y-5">
               
               {/* Year Selector Grid (2018 - 2026) */}
               <div>
                 <div className="text-[11px] font-black text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-[#F26422]" />
-                    <span>YKS Sınav Yılı Seçimi (2018 - 2026):</span>
+                    <span>Sınav Yılı Seçimi (2018-2026):</span>
                   </span>
-                  <span className="text-amber-800 font-extrabold">Seçilen: {selectedYear} Yılı</span>
+                  <span className="text-amber-900 font-extrabold">{selectedYear} Yılı</span>
                 </div>
-                <div className="grid grid-cols-5 sm:grid-cols-9 gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-300 shadow-xs">
+                <div className="no-scrollbar flex sm:grid sm:grid-cols-9 gap-1 bg-white p-1 rounded-2xl border border-slate-200 shadow-xs overflow-x-auto">
                   {yearsList.map((y) => (
                     <button
                       key={y}
                       onClick={() => setSelectedYear(y)}
-                      className={`py-1.5 text-xs font-black rounded-xl transition ${
+                      className={`min-w-[42px] py-1.5 text-xs font-black rounded-xl transition ${
                         selectedYear === y
-                          ? 'bg-[#F26422] text-white shadow-md scale-105'
+                          ? 'bg-[#F26422] text-white shadow-xs scale-105'
                           : 'text-slate-700 hover:bg-slate-100'
                       }`}
                     >
@@ -463,13 +463,13 @@ export default function NetCalculator({ onOpenApplyModal }) {
               </div>
 
               {/* Main Selected Rank Output Card */}
-              <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border-2 border-amber-300 shadow-xs">
-                <div className="p-3 bg-amber-100 rounded-2xl border border-amber-300 shrink-0">
-                  <Award className="w-7 h-7 text-[#D97706]" />
+              <div className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-amber-300/80 shadow-xs">
+                <div className="p-3 bg-amber-100/70 rounded-2xl border border-amber-300 shrink-0">
+                  <Award className="w-6 h-6 text-[#D97706]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs uppercase font-black text-slate-600 tracking-wider">
+                    <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider">
                       {selectedYear} YKS Tahmini Sıralamanız
                     </span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300">
@@ -486,8 +486,8 @@ export default function NetCalculator({ onOpenApplyModal }) {
               </div>
 
               {/* FULL 2018 - 2026 COMPARISON TABLE */}
-              <div className="bg-white p-4 rounded-2xl border border-slate-300 space-y-2 text-xs shadow-xs">
-                <div className="flex items-center justify-between font-black text-slate-900 border-b border-slate-200 pb-2">
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 space-y-2 text-xs shadow-xs">
+                <div className="flex items-center justify-between font-black text-slate-900 border-b border-slate-100 pb-2">
                   <span className="flex items-center gap-1.5">
                     <History className="w-4 h-4 text-blue-600" />
                     <span>2018 - 2026 Tüm Yıllar Sıralama Matrisi</span>
@@ -495,7 +495,7 @@ export default function NetCalculator({ onOpenApplyModal }) {
                   <span className="text-[10px] text-[#F26422] font-extrabold">Aynı Net İle Kıyaslama</span>
                 </div>
 
-                <div className="max-h-60 overflow-y-auto space-y-1.5 pr-1 pt-1 font-bold">
+                <div className="max-h-56 overflow-y-auto space-y-1.5 pr-1 pt-1 font-bold">
                   {yearsList.map((yr) => {
                     const res = getRankByYear(yr);
                     const isSelected = selectedYear === yr;
@@ -505,12 +505,12 @@ export default function NetCalculator({ onOpenApplyModal }) {
                         onClick={() => setSelectedYear(yr)}
                         className={`flex items-center justify-between p-2 rounded-xl cursor-pointer transition ${
                           isSelected
-                            ? 'bg-amber-100 border-2 border-amber-400 text-slate-950 shadow-xs'
+                            ? 'bg-amber-100/80 border border-amber-400 text-slate-950 shadow-xs'
                             : 'bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800'
                         }`}
                       >
                         <div className="flex items-center gap-2">
-                          <span className={`w-12 text-center font-black rounded px-1 py-0.5 ${isSelected ? 'bg-[#F26422] text-white' : 'bg-slate-200 text-slate-800'}`}>
+                          <span className={`w-12 text-center font-black rounded px-1 py-0.5 text-xs ${isSelected ? 'bg-[#F26422] text-white' : 'bg-slate-200 text-slate-800'}`}>
                             {yr}
                           </span>
                           <span className="text-[11px] text-slate-600 font-bold hidden sm:inline">
@@ -531,9 +531,9 @@ export default function NetCalculator({ onOpenApplyModal }) {
               </div>
 
               {/* Target Universities & Coach Suggestion */}
-              <div className="p-4 bg-white rounded-2xl border border-amber-300 text-xs text-slate-800 space-y-1.5 shadow-xs">
-                <div className="flex items-center gap-2 font-black text-[#D97706]">
-                  <Sparkles className="w-4 h-4" />
+              <div className="p-3.5 bg-white rounded-2xl border border-amber-300 text-xs text-slate-800 space-y-1 shadow-xs">
+                <div className="flex items-center gap-1.5 font-black text-[#D97706]">
+                  <Sparkles className="w-3.5 h-3.5" />
                   <span>Altın Koç Koçluk Analizi ({selectedYear} Verisi)</span>
                 </div>
                 <p className="font-semibold text-slate-700">

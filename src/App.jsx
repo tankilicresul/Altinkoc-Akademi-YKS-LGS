@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { SiteConfigProvider } from './context/SiteConfigContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ApplicationModal from './components/ApplicationModal';
@@ -46,7 +47,7 @@ function MainApp() {
       if (isAdmin) {
         setPortalMode('admin');
       } else {
-        alert('Bu panele sadece Sistem Yöneticisi (resultankilic.business@gmail.com) erişebilir.');
+        alert('Bu panele sadece Sistem Yöneticileri (Resul Tankılıç & Miraç Üresin) erişebilir.');
       }
       return;
     }
@@ -96,7 +97,7 @@ function MainApp() {
               <Lock className="w-12 h-12 text-[#F26422] mx-auto" />
               <h2 className="text-2xl font-black text-slate-900">Erişim Yetkisi Bekleniyor</h2>
               <p className="text-sm text-slate-600 font-bold">
-                Öğrenci Takip Paneline erişebilmek için hesabınızın yönetici (resultankilic.business@gmail.com) tarafından onaylanması gerekmektedir.
+                Öğrenci Takip Paneline erişebilmek için hesabınızın yöneticilerimiz (Resul Tankılıç / Miraç Üresin) tarafından onaylanması gerekmektedir.
               </p>
               <button
                 onClick={() => setPortalMode('public')}
@@ -116,7 +117,7 @@ function MainApp() {
               <Lock className="w-12 h-12 text-rose-600 mx-auto" />
               <h2 className="text-2xl font-black text-slate-900">Yönetici Yetkisi Gerekli</h2>
               <p className="text-sm text-slate-600 font-bold">
-                Bu alana sadece sistem sahibi e-postası (resultankilic.business@gmail.com) ile giriş yapan yöneticiler erişebilir.
+                Bu alana sadece kurucularımız Resul Tankılıç ve Miraç Üresin e-postaları ile giriş yapan yöneticiler erişebilir.
               </p>
               <button
                 onClick={() => setPortalMode('public')}
@@ -198,7 +199,9 @@ function MainApp() {
 export default function App() {
   return (
     <AuthProvider>
-      <MainApp />
+      <SiteConfigProvider>
+        <MainApp />
+      </SiteConfigProvider>
     </AuthProvider>
   );
 }

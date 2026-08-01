@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { X, Lock, Mail, User, Phone, ShieldCheck, Sparkles, UserCheck, ArrowRight, KeyRound } from 'lucide-react';
+import { X, Lock, Mail, User, Phone, ArrowRight, KeyRound, CheckCircle2 } from 'lucide-react';
 
 export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) {
-  const { login, register, ADMIN_EMAILS } = useAuth();
+  const { login, register } = useAuth();
   const [tab, setTab] = useState(defaultTab); // 'login' or 'signup'
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ name: '', email: '', phone: '', password: '', rolePreference: 'student' });
@@ -16,6 +17,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setSuccessMsg('');
     setLoading(true);
     try {
       const res = await login(loginData.email, loginData.password);
@@ -23,10 +25,10 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
         if (onAuthSuccess) onAuthSuccess(res.user);
         onClose();
       } else {
-        setErrorMsg('Giriş başarısız. Lütfen e-posta adresinizi kontrol edin.');
+        setErrorMsg('Giriş başarısız. E-posta adresi veya şifrenizi kontrol edin.');
       }
     } catch (err) {
-      setErrorMsg('Giriş yaparken bir hata oluştu.');
+      setErrorMsg('Giriş yapılırken bir hata oluştu.');
     }
     setLoading(false);
   };
@@ -34,12 +36,16 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setSuccessMsg('');
     setLoading(true);
     try {
       const res = await register(signupData);
       if (res.success) {
-        if (onAuthSuccess) onAuthSuccess(res.user);
-        onClose();
+        setSuccessMsg('Hesabınız başarıyla oluşturuldu! Oturum açılıyor...');
+        setTimeout(() => {
+          if (onAuthSuccess) onAuthSuccess(res.user);
+          onClose();
+        }, 1000);
       }
     } catch (err) {
       setErrorMsg('Kayıt oluşturulurken bir hata oluştu.');
@@ -47,20 +53,10 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
     setLoading(false);
   };
 
-  const handleQuickLogin = async (email, password = '123') => {
-    setLoading(true);
-    const res = await login(email, password);
-    if (res.success) {
-      if (onAuthSuccess) onAuthSuccess(res.user);
-      onClose();
-    }
-    setLoading(false);
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
       <div className="relative w-full max-w-md bg-white border-2 border-amber-300 rounded-3xl shadow-2xl overflow-hidden">
-        {/* Top Gradient */}
+        {/* Top Accent Gradient */}
         <div className="h-2 bg-brand-gradient" />
 
         {/* Close Button */}
@@ -81,14 +77,14 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
               Altın Koç Akademi <span className="text-gradient-brand">Portalı</span>
             </h3>
             <p className="text-xs text-slate-600 font-bold">
-              {tab === 'login' ? 'Erişim sağlamak için giriş yapın' : 'Yeni bir kullanıcı hesabı oluşturun'}
+              {tab === 'login' ? 'Güvenli giriş yapmak için e-posta ve şifrenizi girin' : 'Yeni bir kullanıcı hesabı oluşturun'}
             </p>
 
             {/* Tab Switcher */}
             <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 mt-4">
               <button
                 type="button"
-                onClick={() => { setTab('login'); setErrorMsg(''); }}
+                onClick={() => { setTab('login'); setErrorMsg(''); setSuccessMsg(''); }}
                 className={`flex-1 py-2 text-xs font-black rounded-xl transition ${
                   tab === 'login' ? 'bg-white text-slate-950 shadow-xs border border-slate-200' : 'text-slate-600 hover:text-slate-900'
                 }`}
@@ -97,7 +93,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
               </button>
               <button
                 type="button"
-                onClick={() => { setTab('signup'); setErrorMsg(''); }}
+                onClick={() => { setTab('signup'); setErrorMsg(''); setSuccessMsg(''); }}
                 className={`flex-1 py-2 text-xs font-black rounded-xl transition ${
                   tab === 'signup' ? 'bg-white text-slate-950 shadow-xs border border-slate-200' : 'text-slate-600 hover:text-slate-900'
                 }`}
@@ -113,12 +109,19 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
             </div>
           )}
 
+          {successMsg && (
+            <div className="p-3 mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-xl text-center flex items-center justify-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>{successMsg}</span>
+            </div>
+          )}
+
           {/* TAB 1: LOGIN */}
           {tab === 'login' && (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  E-posta Adresi
+                  E-posta Adresi *
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
@@ -135,7 +138,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Şifre
+                  Şifre *
                 </label>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
@@ -153,9 +156,9 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-brand-gradient bg-brand-gradient-hover text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-md shadow-orange-500/20"
+                className="w-full flex items-center justify-center gap-2 bg-brand-gradient bg-brand-gradient-hover text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-md shadow-orange-500/20 disabled:opacity-50"
               >
-                <span>{loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}</span>
+                <span>{loading ? 'Doğrulanıyor...' : 'Giriş Yap'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
@@ -217,72 +220,31 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Hesap Türü Tercihi
+                  Şifre Belirleyin *
                 </label>
-                <select
-                  value={signupData.rolePreference}
-                  onChange={(e) => setSignupData({ ...signupData, rolePreference: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-[#F5A623]"
-                >
-                  <option value="student">Öğrenci Hesabı</option>
-                  <option value="mentor">Mentör / Koç Hesabı</option>
-                  <option value="parent">Veli Hesabı</option>
-                </select>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
+                  <input
+                    type="password"
+                    required
+                    value={signupData.password}
+                    onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                    placeholder="••••••••"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-[#F5A623]"
+                  />
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-brand-gradient bg-brand-gradient-hover text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-md shadow-orange-500/20"
+                className="w-full flex items-center justify-center gap-2 bg-brand-gradient bg-brand-gradient-hover text-slate-950 font-black py-3.5 rounded-xl text-sm transition shadow-md shadow-orange-500/20 disabled:opacity-50"
               >
-                <span>{loading ? 'Kayıt Yapılıyor...' : 'Kayıt Ol & Giriş Yap'}</span>
+                <span>{loading ? 'Kayıt Yapılıyor...' : 'Kayıt Ol'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
           )}
-
-          {/* DEMO / QUICK LOGIN OPTIONS FOR BOTH CO-FOUNDERS */}
-          <div className="mt-6 pt-5 border-t border-slate-200 space-y-2">
-            <div className="text-[11px] font-black text-slate-500 uppercase tracking-wider text-center mb-2">
-              ⚡ Hızlı Kurucu & Test Girişleri:
-            </div>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('resultankilic.business@gmail.com')}
-              className="w-full flex items-center justify-between p-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-xl text-xs font-black text-amber-900 transition"
-            >
-              <span className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#F26422]" />
-                <span>Resul Tankılıç (Kurucu Admin)</span>
-              </span>
-              <span className="text-[10px] bg-[#F26422] text-white px-2 py-0.5 rounded font-bold">Tam Yetki</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('miracuresin3@gmail.com')}
-              className="w-full flex items-center justify-between p-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-xl text-xs font-black text-amber-900 transition"
-            >
-              <span className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#F5A623]" />
-                <span>Miraç Üresin (Kurucu Admin)</span>
-              </span>
-              <span className="text-[10px] bg-[#F5A623] text-slate-950 px-2 py-0.5 rounded font-bold">Tam Yetki</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('ahmet@example.com')}
-              className="w-full flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 transition"
-            >
-              <span className="flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-emerald-600" />
-                <span>Onaylı Öğrenci (Ahmet Yılmaz)</span>
-              </span>
-              <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded font-bold">Öğrenci Paneli</span>
-            </button>
-          </div>
 
         </div>
       </div>

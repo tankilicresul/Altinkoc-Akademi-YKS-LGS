@@ -3,10 +3,12 @@ import GeometricFrame from '../components/GeometricFrame';
 import EditableText from '../components/EditableText';
 import EditableMedia from '../components/EditableMedia';
 import { useSiteConfig } from '../context/SiteConfigContext';
+import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Trophy, Users, Calculator, Sparkles, Star } from 'lucide-react';
 
 export default function HeroSection({ onOpenApplyModal, onNavigate }) {
   const { siteConfig } = useSiteConfig();
+  const { isAdmin } = useAuth();
   const info = siteConfig?.info || {};
   const stats = info.stats || {};
 
@@ -20,7 +22,12 @@ export default function HeroSection({ onOpenApplyModal, onNavigate }) {
   ];
 
   return (
-    <section id="home" className="relative min-h-[88vh] flex items-center justify-center pt-28 pb-14 bg-[#f8fafc] overflow-hidden">
+    <section
+      id="home"
+      className={`relative min-h-[88vh] flex items-center justify-center pb-14 bg-[#f8fafc] overflow-hidden transition-all duration-300 ${
+        isAdmin ? 'pt-36 sm:pt-40' : 'pt-28'
+      }`}
+    >
       {/* Soft Background Orbs */}
       <div className="absolute top-10 left-10 w-96 h-96 bg-[#F5A623]/8 blur-3xl pointer-events-none rounded-full" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#F26422]/8 blur-3xl pointer-events-none rounded-full" />

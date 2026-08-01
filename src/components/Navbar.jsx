@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import BrandLogo from './BrandLogo';
 import { useAuth } from '../context/AuthContext';
-import { Menu, X, Sparkles, UserCheck, ShieldCheck, ArrowRight, Calculator, LogIn, LogOut, User } from 'lucide-react';
+import { Menu, X, ArrowRight, Calculator, LogIn, LogOut, User } from 'lucide-react';
 
 export default function Navbar({ activeSection, setActiveSection, currentPortalMode, setPortalMode, onOpenApplyModal, onOpenAuthModal }) {
-  const { currentUser, isAdmin, isApprovedStudentOrMentor, logout } = useAuth();
+  const { currentUser, isAdmin, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -39,10 +39,12 @@ export default function Navbar({ activeSection, setActiveSection, currentPortalM
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+        isAdmin ? 'top-11' : 'top-0'
+      } ${
         isScrolled
           ? 'bg-white/98 backdrop-blur-md border-b border-slate-200/80 shadow-xs py-2.5'
-          : 'bg-white/90 backdrop-blur-sm border-b border-slate-100 py-3.5'
+          : 'bg-white/90 backdrop-blur-sm border-b border-slate-100 py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

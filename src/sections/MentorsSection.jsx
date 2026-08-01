@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import GeometricFrame from '../components/GeometricFrame';
+import EditableText from '../components/EditableText';
+import EditableMedia from '../components/EditableMedia';
 import { GraduationCap, Award, Star, MessageSquare, CheckCircle, Sparkles, UserCheck, ShieldCheck } from 'lucide-react';
-import { INITIAL_SITE_CONTENT } from '../data/siteContent';
+import { useSiteConfig } from '../context/SiteConfigContext';
 
 export default function MentorsSection({ onOpenApplyModal }) {
-  const [mentorsList, setMentorsList] = useState(() => {
-    const saved = localStorage.getItem('altin_koc_mentors');
-    return saved ? JSON.parse(saved) : INITIAL_SITE_CONTENT.mentors;
-  });
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const saved = localStorage.getItem('altin_koc_mentors');
-      if (saved) setMentorsList(JSON.parse(saved));
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  const { siteConfig } = useSiteConfig();
+  const mentorsList = siteConfig?.mentors || [];
 
   return (
     <section id="mentorler" className="py-24 bg-[#f8fafc] relative overflow-hidden">
@@ -40,11 +31,11 @@ export default function MentorsSection({ onOpenApplyModal }) {
 
         {/* MENTORS CARDS GRID */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {mentorsList.map((mentor) => {
+          {mentorsList.map((mentor, index) => {
             const isFounder = mentor.isFounder || mentor.name.includes('Resul') || mentor.name.includes('Miraç');
             return (
               <div
-                key={mentor.id}
+                key={mentor.id || index}
                 className={`glass-panel-interactive border-2 ${
                   isFounder ? 'border-[#F26422] shadow-2xl bg-amber-50/20' : 'border-amber-300 bg-white'
                 } rounded-3xl p-6 md:p-8 shadow-xl space-y-5 flex flex-col justify-between relative overflow-hidden`}
@@ -62,35 +53,47 @@ export default function MentorsSection({ onOpenApplyModal }) {
                   <div className="flex items-center justify-between pt-1">
                     <span className="px-3 py-1 bg-amber-100 text-amber-900 font-black text-xs rounded-full border border-amber-300 flex items-center gap-1">
                       <Award className="w-3.5 h-3.5 text-[#D97706]" />
-                      <span>{mentor.yksRank}</span>
+                      <EditableText value={mentor.yksRank} configPath={`mentors.${index}.yksRank`} />
                     </span>
                   </div>
 
-                  {/* Avatar & Name */}
+                  {/* Avatar (Direct Computer Upload) & Name */}
                   <div className="flex items-center gap-4 pt-2">
-                    <img
-                      src={mentor.avatar}
-                      alt={mentor.name}
-                      className="w-16 h-16 rounded-2xl object-cover border-2 border-amber-300 shadow-md"
-                    />
+                    <div className="shrink-0 w-16 h-16 rounded-2xl overflow-hidden border-2 border-amber-300 shadow-md">
+                      <EditableMedia
+                        src={mentor.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'}
+                        alt={mentor.name}
+                        configPath={`mentors.${index}.avatar`}
+                        className="w-16 h-16 object-cover"
+                      />
+                    </div>
+
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <h3 className="text-xl font-black text-slate-900">{mentor.name}</h3>
+                        <h3 className="text-xl font-black text-slate-900">
+                          <EditableText value={mentor.name} configPath={`mentors.${index}.name`} />
+                        </h3>
                       </div>
-                      <div className="text-xs font-bold text-[#F26422]">{mentor.university}</div>
-                      <div className="text-[11px] text-slate-500 font-bold mt-0.5">{mentor.experience}</div>
+                      <div className="text-xs font-bold text-[#F26422]">
+                        <EditableText value={mentor.university} configPath={`mentors.${index}.university`} />
+                      </div>
+                      <div className="text-[11px] text-slate-500 font-bold mt-0.5">
+                        <EditableText value={mentor.experience} configPath={`mentors.${index}.experience`} />
+                      </div>
                     </div>
                   </div>
 
                   {/* Specialty Box */}
                   <div className="p-3.5 bg-white rounded-2xl border border-slate-200 text-xs font-extrabold text-slate-800 space-y-1 shadow-xs">
                     <div className="text-[10px] text-slate-500 uppercase tracking-wider font-black">Uzmanlık Alanı:</div>
-                    <div className="text-slate-900 font-black">{mentor.specialty}</div>
+                    <div className="text-slate-900 font-black">
+                      <EditableText value={mentor.specialty} configPath={`mentors.${index}.specialty`} />
+                    </div>
                   </div>
 
                   {/* Bio */}
                   <p className="text-xs text-slate-600 font-semibold leading-relaxed">
-                    {mentor.bio}
+                    <EditableText tag="textarea" value={mentor.bio} configPath={`mentors.${index}.bio`} />
                   </p>
                 </div>
 

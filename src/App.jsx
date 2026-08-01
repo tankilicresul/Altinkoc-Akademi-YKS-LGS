@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { SiteConfigProvider } from './context/SiteConfigContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import AdminEditBar from './components/AdminEditBar';
 import ApplicationModal from './components/ApplicationModal';
 import AuthModal from './components/AuthModal';
 import HeroSection from './sections/HeroSection';
@@ -63,15 +64,20 @@ function MainApp() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-[#F5A623] selection:text-slate-950">
+      {/* Live Visual In-Line Edit Bar for Co-Founders (Resul & Miraç) */}
+      <AdminEditBar onOpenDashboard={() => setPortalMode('admin')} />
+
       {/* Sticky Header Navbar */}
-      <Navbar
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-        currentPortalMode={portalMode}
-        setPortalMode={handleModeSwitch}
-        onOpenApplyModal={() => setIsApplyModalOpen(true)}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
-      />
+      <div className={isAdmin ? 'pt-8 md:pt-10' : ''}>
+        <Navbar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          currentPortalMode={portalMode}
+          setPortalMode={handleModeSwitch}
+          onOpenApplyModal={() => setIsApplyModalOpen(true)}
+          onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        />
+      </div>
 
       {/* RENDER CURRENT MODE */}
       <main>

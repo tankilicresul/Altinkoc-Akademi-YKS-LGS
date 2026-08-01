@@ -1,22 +1,30 @@
 import React from 'react';
+import { useSiteConfig } from '../context/SiteConfigContext';
+import EditableText from './EditableText';
+import EditableMedia from './EditableMedia';
 
-export default function BrandLogo({ variant = 'image', className = '' }) {
+export default function BrandLogo({ className = '' }) {
+  const { siteConfig } = useSiteConfig();
+  const logoUrl = siteConfig?.info?.logoUrl || '/images/logo/logo-clean-1.png';
+  const brandName = siteConfig?.info?.brandName || 'Altın Koç Akademi';
+
   return (
-    <div className={`flex items-center gap-3 select-none cursor-pointer ${className}`}>
-      <div className="bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-center">
-        <img
-          src="/images/logo/logo-clean-1.png"
-          alt="Altın Koç Akademi"
-          className="h-9 md:h-11 w-auto object-contain"
+    <div className={`flex items-center gap-2 ${className}`}>
+      <div className="bg-white p-1 rounded-xl border border-slate-200 shadow-xs max-h-12 flex items-center justify-center overflow-hidden">
+        <EditableMedia
+          src={logoUrl}
+          alt={brandName}
+          configPath="info.logoUrl"
+          className="h-9 sm:h-10 w-auto object-contain"
         />
       </div>
-      <div className="hidden sm:flex flex-col text-left leading-none">
-        <span className="text-base font-black text-slate-900 tracking-tight flex items-center gap-1">
-          <span className="text-[#F5A623]">Altın</span>
-          <span className="text-[#F26422]">Koç</span>
+
+      <div className="flex flex-col text-left">
+        <span className="text-base sm:text-lg font-black text-slate-900 leading-tight">
+          <EditableText value={brandName} configPath="info.brandName" />
         </span>
-        <span className="text-[11px] font-extrabold text-slate-500 tracking-widest uppercase">
-          Akademi
+        <span className="text-[10px] font-black text-[#F26422] uppercase tracking-wider">
+          <EditableText value={siteConfig?.info?.hashtag || '#çarealtınkoç'} configPath="info.hashtag" />
         </span>
       </div>
     </div>

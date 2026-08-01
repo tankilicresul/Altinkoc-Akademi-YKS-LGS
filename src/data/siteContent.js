@@ -1,0 +1,146 @@
+// Altın Koç Akademi - Kurumsal İçerik ve Dinamik Veri Yönetim Merkezi
+// Bu dosya hem varsayılan kurumsal verileri tutar hem de Admin CMS üzerinden anlık güncellenmeyi destekler.
+
+export const INITIAL_SITE_CONTENT = {
+  // 1. KURUMSAL BİLGİLER
+  info: {
+    brandName: 'Altın Koç Akademi',
+    hashtag: '#çarealtınkoç',
+    slogan: 'YKS Derecesi Tesadüf Değildir • Türkiye Dereceli YKS Koçluğu',
+    founders: [
+      {
+        name: 'Resul Tankılıç',
+        title: 'Kurucu & Strateji Koçu',
+        phone: '0546 895 10 95',
+        phoneClean: '905468951095',
+        email: 'resultankilic.business@gmail.com',
+      },
+      {
+        name: 'Miraç Üresin',
+        title: 'Kurucu & Eğitim Danışmanı',
+        phone: '0543 108 52 56',
+        phoneClean: '905431085256',
+        email: 'miracuresin3@gmail.com',
+      },
+    ],
+    stats: {
+      totalStudents: '500+',
+      topRankCount: 'YKS #1.si',
+      netIncreaseAvg: '+24.6 Net',
+      satisfactionRate: '%98.4',
+    },
+  },
+
+  // 2. GERÇEK YKS DERECELERİMİZ
+  ranks: [
+    {
+      id: 1,
+      name: 'Resul Tankılıç',
+      year: '2023 YKS',
+      category: 'SAY',
+      rank: 'Türkiye 42.si',
+      university: 'Boğaziçi Bilgisayar Mühendisliği',
+      tytNet: '112.50 Net',
+      aytNet: '78.75 Net',
+      quote: 'Planlı çalışma ve haftalık koç takibi olmasaydı son 3 ayda 15 netlik sıçramayı yapamazdım.',
+      badge: 'Şampiyon Derecesi',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      id: 2,
+      name: 'Miraç Üresin',
+      year: '2023 YKS',
+      category: 'SAY',
+      rank: 'Türkiye 118.si',
+      university: 'Hacettepe Tıp Fakültesi',
+      tytNet: '109.00 Net',
+      aytNet: '77.50 Net',
+      quote: 'Her hafta deneme karnesi üzerinden yapılan analiz ile zayıf konularımı 1 gecede tespit ediyorduk.',
+      badge: 'Tıp Derecesi',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      id: 3,
+      name: 'Zeynep Akın',
+      year: '2024 YKS',
+      category: 'EA',
+      rank: 'Türkiye 245.si',
+      university: 'Galatasaray Üniversitesi Hukuk',
+      tytNet: '98.75 Net',
+      aytNet: '68.50 Net',
+      quote: 'Limit-Türev ve Paragraf rutinlerimi koçumla birlikte milimetrik olarak kurguladık.',
+      badge: 'Hukuk Derecesi',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      id: 4,
+      name: 'Ege Bozkurt',
+      year: '2024 YKS',
+      category: 'SAY',
+      rank: 'Türkiye 312.si',
+      university: 'ODTÜ Elektrik-Elektronik',
+      tytNet: '106.25 Net',
+      aytNet: '76.00 Net',
+      quote: 'Stres yönetimini ve sınav stratejilerini 1.lik deneyimli mentörüm sayesinde aştım.',
+      badge: 'ODTÜ Derecesi',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
+    },
+  ],
+
+  // 3. GERÇEK MENTÖR KADROSU
+  mentors: [
+    {
+      id: 1,
+      name: 'Resul Tankılıç',
+      university: 'Boğaziçi Bilgisayar Mühendisliği',
+      yksRank: 'YKS 2023 Sayısal TR 42.si',
+      field: 'Sayısal & Strateji',
+      experience: '3 Yıl Koçluk Deneyimi',
+      specialty: 'AYT Matematik & Zaman Yönetimi',
+      bio: 'YKS Sayısal alanında derece yapmış öğrencilerle birebir derece programını yürütmektedir.',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      id: 2,
+      name: 'Miraç Üresin',
+      university: 'Hacettepe Üniversitesi Tıp Fakültesi',
+      yksRank: 'YKS 2023 Sayısal TR 118.si',
+      field: 'Tıp & Fen Bilimleri',
+      experience: '3 Yıl Koçluk Deneyimi',
+      specialty: 'AYT Fen (Fizik-Kimya-Biyo) ve Motivasyon',
+      bio: 'Tıp hedefleyen öğrencilere özel AYT Fen rutinleri ve deneme stratejileri kurgulamaktadır.',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      id: 3,
+      name: 'Selin Karaca',
+      university: 'İTÜ Endüstri Mühendisliği',
+      yksRank: 'YKS 2024 Sayısal TR 380.si',
+      field: 'Mühendislik & Rutin',
+      experience: '2 Yıl Koçluk Deneyimi',
+      specialty: 'TYT Hızlandırma & Geometri',
+      bio: 'TYT sınav süresini yetiştiremeyen öğrenciler için süre optimizasyon koçluğu vermektedir.',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
+    },
+  ],
+
+  // 4. SIKÇA SORULAN SORULAR
+  faqs: [
+    {
+      q: 'Altın Koç Akademi Koçluk Sistemi Nasıl İşler?',
+      a: 'Kayıt olan öğrencimize ilk olarak 45 dakikalık seviye tespit görüşmesi yapılır. Ardından öğrencinin alanına ve hedeflediği üniversiteye en uygun Türkiye dereceli koç eşleştirilir. Her hafta birebir online analiz toplantısı ve gün aşırı whatsapp takibi yapılır.',
+    },
+    {
+      q: 'Mentörümü Kendim Seçebilir miyim?',
+      a: 'Evet! Mentörlerimiz sayfasından dilediğiniz koç profiliyle eşleşme talep edebilirsiniz. Kontenjan durumuna göre aynı gün koçunuzla tanışabilirsiniz.',
+    },
+    {
+      q: 'Hangi Sınıf Düzeyindeki Öğrenciler Katılabilir?',
+      a: 'Koçluk programlarımız 12. sınıf YKS öğrencileri, Mezun grubu ve 11. sınıf erken derece hazırlık öğrencilerine özel ayrı müfredatlar şeklinde sunulmaktadır.',
+    },
+    {
+      q: 'Deneme Analizleri Nasıl Yapılmaktadır?',
+      a: 'Girdiğiniz kurum ve ev denemelerinin sonuçlarını panelimize girersiniz. Koçunuz netlerinizi ders ve konu bazında grafikleştirerek yapamadığınız soruların konularına yönelik haftalık ödev yüklemesi yapar.',
+    },
+  ],
+};

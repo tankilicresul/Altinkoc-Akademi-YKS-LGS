@@ -1,176 +1,142 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GeometricFrame from '../components/GeometricFrame';
-import { Award, Trophy, Star, ArrowUpRight, CheckCircle } from 'lucide-react';
+import { Trophy, Star, ArrowRight, Sparkles, Filter, Award } from 'lucide-react';
+import { INITIAL_SITE_CONTENT } from '../data/siteContent';
 
 export default function RanksSection({ onOpenApplyModal }) {
   const [filter, setFilter] = useState('ALL');
 
-  const rankStudents = [
-    {
-      id: 1,
-      name: 'Eren Yılmaz',
-      rank: 'Türkiye 1.si',
-      field: 'SAY',
-      university: 'Boğaziçi Üniversitesi',
-      department: 'Bilgisayar Mühendisliği',
-      quote: 'Altın Koç’un deneme analizleri ve haftalık soru hedeflemesi olmasaydı YKS 1.liği hayal kalırdı. Tam bir sistem işi!',
-      tag: 'TYT: 118.75 | AYT: 80.00',
-    },
-    {
-      id: 2,
-      name: 'Zeynep Kaya',
-      rank: 'Türkiye 14.sü',
-      field: 'SAY',
-      university: 'Hacettepe Üniversitesi',
-      department: 'Tıp Fakültesi (İngilizce)',
-      quote: 'AYT Matematik netlerim 25 seviyesindeyken koçumla yaptığımız doğru turlama stratejisiyle 39.25 nete yükselttim.',
-      tag: 'TYT: 112.50 | AYT: 78.75',
-    },
-    {
-      id: 3,
-      name: 'Mert Aksoy',
-      rank: 'Türkiye 42.si',
-      field: 'EA',
-      university: 'Galatasaray Üniversitesi',
-      department: 'Hukuk Fakültesi',
-      quote: 'Eşit ağırlıkta Edebiyat ezberi ile Matematik pratik dengesini kuran koçuma sonsuz teşekkürler. #çarealtınkoç!',
-      tag: 'TYT: 108.00 | AYT: 74.50',
-    },
-    {
-      id: 4,
-      name: 'Elif Demir',
-      rank: 'Türkiye 89.su',
-      field: 'SAY',
-      university: 'ODTÜ',
-      department: 'Endüstri Mühendisliği',
-      quote: 'Son 3 ay kriz anlarımı ve deneme düşüşlerimi psikolojik koçluk desteğiyle aştım. Yol haritam hep netti.',
-      tag: 'TYT: 110.00 | AYT: 77.50',
-    },
-    {
-      id: 5,
-      name: 'Caner Şahin',
-      rank: 'Türkiye 145.si',
-      field: 'SAY',
-      university: 'İTÜ',
-      department: 'Yapay Zeka ve Veri Mühendisliği',
-      quote: 'Yanlış yaptığım her soruyu koçumla beraber analiz edip haftalık tekrar listeme koyduk. Başarının sırrı bu.',
-      tag: 'TYT: 106.25 | AYT: 76.25',
-    },
-    {
-      id: 6,
-      name: 'Selin Arslan',
-      rank: 'Türkiye 210.su',
-      field: 'SOZ',
-      university: 'Bilkent Üniversitesi',
-      department: 'İletişim ve Tasarım (Burslu)',
-      quote: 'Düzenli takip sistemi olmasaydı erteleme hastalığına yenik düşerdim. Disiplini Altın Koç ile kazandım.',
-      tag: 'TYT: 98.75 | AYT: 71.00',
-    },
-  ];
+  const [ranksList, setRanksList] = useState(() => {
+    const saved = localStorage.getItem('altin_koc_ranks');
+    return saved ? JSON.parse(saved) : INITIAL_SITE_CONTENT.ranks;
+  });
 
-  const filtered = filter === 'ALL' ? rankStudents : rankStudents.filter((s) => s.field === filter);
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem('altin_koc_ranks');
+      if (saved) setRanksList(JSON.parse(saved));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  const filteredRanks = filter === 'ALL'
+    ? ranksList
+    : ranksList.filter((item) => item.category === filter);
 
   return (
-    <section id="dereceler" className="py-24 bg-[#F9FAFB] relative overflow-hidden">
-      {/* Corner Frame Motif */}
-      <GeometricFrame position="top-left" />
+    <section id="dereceler" className="py-24 bg-white relative overflow-hidden">
+      {/* Background Soft Gradients */}
+      <div className="absolute top-1/2 left-0 w-72 h-72 bg-[#F5A623]/5 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#F26422]/5 blur-3xl pointer-events-none rounded-full" />
+
+      <GeometricFrame position="top-right" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black hashtag-badge">
-            <Trophy className="w-3.5 h-3.5 text-[#F26422]" />
-            <span>Gurur Tablomuz • YKS Dereceleri</span>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+          <div className="space-y-4 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black hashtag-badge">
+              <Trophy className="w-3.5 h-3.5 text-[#F26422]" />
+              <span>Gerçek Başarı Hikayeleri</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+              Türkiye Derecelerimiz & <span className="text-gradient-brand">Şampiyon Öğrencilerimiz</span>
+            </h2>
+            <p className="text-slate-600 text-base md:text-lg font-medium">
+              Altın Koç Akademi derece programı ile Türkiye derecesine imza atmış öğrencilerimizin resmi YKS başarı tablosu.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-            Şans Değil, <span className="text-gradient-brand">Sistemli Çalışma:</span> Derecelerimiz
-          </h2>
-          <p className="text-slate-600 text-base md:text-lg font-medium">
-            Altın Koç Akademi koçluk sistemiyle YKS'de Türkiye ilk 100 ve ilk 1000'e giren derece öğrencilerimizin başarı hikayeleri.
-          </p>
 
-          {/* Filters */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+          {/* Filter Pills */}
+          <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shrink-0">
             {[
-              { id: 'ALL', label: 'Tüm Dereceler (500+)' },
-              { id: 'SAY', label: 'Sayısal (SAY)' },
-              { id: 'EA', label: 'Eşit Ağırlık (EA)' },
-              { id: 'SOZ', label: 'Sözel (SÖZ)' },
-            ].map((b) => (
+              { id: 'ALL', label: 'Tüm Dereceler' },
+              { id: 'SAY', label: 'Sayısal' },
+              { id: 'EA', label: 'Eşit Ağırlık' },
+              { id: 'SOZ', label: 'Sözel' },
+            ].map((tab) => (
               <button
-                key={b.id}
-                onClick={() => setFilter(b.id)}
-                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 ${
-                  filter === b.id
-                    ? 'bg-brand-gradient text-slate-950 shadow-md shadow-orange-500/20'
-                    : 'bg-white text-slate-700 hover:text-slate-950 border border-slate-200'
+                key={tab.id}
+                onClick={() => setFilter(tab.id)}
+                className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                  filter === tab.id
+                    ? 'bg-brand-gradient text-slate-950 shadow-md'
+                    : 'text-slate-700 hover:text-slate-950'
                 }`}
               >
-                {b.label}
+                {tab.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Rank Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((student) => (
+        {/* RANKS CARDS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredRanks.map((item) => (
             <div
-              key={student.id}
-              className="glass-card glass-card-hover rounded-3xl p-6 relative flex flex-col justify-between overflow-hidden group bg-white border border-slate-200/80 shadow-sm"
+              key={item.id}
+              className="glass-panel-interactive border-2 border-amber-300/80 rounded-3xl p-6 flex flex-col justify-between space-y-4 bg-white shadow-xl hover:border-amber-400"
             >
-              {/* Badge ranking */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="px-3.5 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-800 font-black text-sm flex items-center gap-1.5 shadow-xs">
-                  <Award className="w-4 h-4 text-[#F5A623]" />
-                  {student.rank}
-                </span>
-                <span className="text-xs font-bold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg border border-slate-200">
-                  {student.field}
-                </span>
-              </div>
-
-              {/* Student details */}
-              <div className="space-y-3">
-                <h3 className="text-xl font-black text-slate-900 group-hover:text-[#F26422] transition">
-                  {student.name}
-                </h3>
-                <div className="text-sm font-bold text-amber-700">
-                  {student.university}
-                </div>
-                <div className="text-xs text-slate-600 font-semibold">
-                  {student.department}
+              <div className="space-y-4">
+                {/* Header Badge & Rank */}
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 bg-amber-100 text-amber-900 font-black text-xs rounded-full border border-amber-300">
+                    {item.rank}
+                  </span>
+                  <span className="text-xs font-extrabold text-slate-500">{item.year}</span>
                 </div>
 
-                <blockquote className="text-xs text-slate-700 italic bg-amber-50/50 p-3.5 rounded-2xl border border-amber-200/60 relative">
-                  "{student.quote}"
-                </blockquote>
+                {/* Name & University */}
+                <div>
+                  <h3 className="text-xl font-black text-slate-900">{item.name}</h3>
+                  <div className="text-xs font-bold text-[#F26422] mt-0.5">{item.university}</div>
+                </div>
+
+                {/* Net Breakdown */}
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-black text-slate-800 space-y-1">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-bold">TYT Neti:</span>
+                    <span className="text-[#D97706]">{item.tytNet}</span>
+                  </div>
+                  <div className="flex justify-between border-t border-slate-200 pt-1">
+                    <span className="text-slate-500 font-bold">AYT Neti:</span>
+                    <span className="text-[#F26422]">{item.aytNet}</span>
+                  </div>
+                </div>
+
+                {/* Student Quote */}
+                <p className="text-xs text-slate-600 font-semibold italic bg-amber-50/50 p-3 rounded-xl border border-amber-200/50">
+                  "{item.quote}"
+                </p>
               </div>
 
-              {/* Tag / Net Breakdown */}
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-bold">
-                <span>{student.tag}</span>
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+              <div className="pt-2">
+                <button
+                  onClick={onOpenApplyModal}
+                  className="w-full text-center text-xs font-black text-slate-900 hover:text-[#F26422] transition py-2 bg-slate-100 rounded-xl border border-slate-200 hover:bg-slate-200"
+                >
+                  Bu Derece İçin Koçluk Al
+                </button>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA banner */}
-        <div className="mt-12 p-8 glass-panel-interactive border border-amber-400/40 rounded-3xl text-center space-y-4 max-w-4xl mx-auto bg-white shadow-xl">
-          <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
-            Sıradaki Derece Hikayesi <span className="text-gradient-brand">Senin Olabilir!</span>
-          </h3>
-          <p className="text-slate-600 text-sm max-w-xl mx-auto font-medium">
-            Hemen kayıt olarak Türkiye dercelerine rehberlik etmiş koçlarımızdan biriyle 15 dakikalık ücretsiz strateji görüşmesi planla.
-          </p>
+        {/* CTA Callout */}
+        <div className="mt-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-3xl p-8 text-slate-950 font-black flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+          <div className="space-y-1">
+            <h4 className="text-2xl font-black text-slate-950">Sıradaki Türkiye Derecesi Sen Ol!</h4>
+            <p className="text-xs sm:text-sm text-slate-900 font-extrabold opacity-90">
+              YKS 2026 derece koçluğu kontenjanlarımız sınırlıdır. Hemen ücretsiz ön görüşme planlayın.
+            </p>
+          </div>
           <button
             onClick={onOpenApplyModal}
-            className="inline-flex items-center gap-2 bg-brand-gradient text-slate-950 font-black px-8 py-3.5 rounded-2xl text-sm transition-all shadow-md shadow-orange-500/20 hover:scale-105"
+            className="px-8 py-4 bg-slate-950 hover:bg-slate-900 text-white font-black rounded-2xl text-sm transition shrink-0 shadow-lg hover:scale-105"
           >
-            <span>Derece Programına Başvur</span>
-            <ArrowUpRight className="w-4 h-4" />
+            Ön Görüşme Randevusu Al
           </button>
         </div>
 

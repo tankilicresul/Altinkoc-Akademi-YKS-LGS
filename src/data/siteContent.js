@@ -1,8 +1,7 @@
 // Altın Koç Akademi - Kurumsal İçerik ve Dinamik Veri Yönetim Merkezi
-// Bu dosya hem varsayılan kurumsal verileri tutar hem de Admin CMS üzerinden anlık güncellenmeyi destekler.
 
 export const INITIAL_SITE_CONTENT = {
-  // 1. KURUMSAL BİLGİLER
+  // 1. KURUMSAL BİLGİLER & KURUCULAR
   info: {
     brandName: 'Altın Koç Akademi',
     hashtag: '#çarealtınkoç',
@@ -14,13 +13,15 @@ export const INITIAL_SITE_CONTENT = {
         phone: '0546 895 10 95',
         phoneClean: '905468951095',
         email: 'resultankilic.business@gmail.com',
+        role: 'Kurucu Mentör',
       },
       {
         name: 'Miraç Üresin',
-        title: 'Kurucu & Eğitim Danışmanı',
+        title: 'Kurucu & Eğitim Danışmanı Koçu',
         phone: '0543 108 52 56',
         phoneClean: '905431085256',
         email: 'miracuresin3@gmail.com',
+        role: 'Kurucu Mentör',
       },
     ],
     stats: {
@@ -43,7 +44,7 @@ export const INITIAL_SITE_CONTENT = {
       tytNet: '112.50 Net',
       aytNet: '78.75 Net',
       quote: 'Planlı çalışma ve haftalık koç takibi olmasaydı son 3 ayda 15 netlik sıçramayı yapamazdım.',
-      badge: 'Şampiyon Derecesi',
+      badge: 'Kurucu Derecesi',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
     },
     {
@@ -55,8 +56,8 @@ export const INITIAL_SITE_CONTENT = {
       university: 'Hacettepe Tıp Fakültesi',
       tytNet: '109.00 Net',
       aytNet: '77.50 Net',
-      quote: 'Her hafta deneme karnesi üzerinden yapılan analiz ile zayıf konularımı 1 gecede tespit ediyorduk.',
-      badge: 'Tıp Derecesi',
+      quote: 'Her hafta deneme karnesi üzerinden yapılan analiz ile zayıf konularımı milimetrik tespit ediyorduk.',
+      badge: 'Kurucu Derecesi',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
     },
     {
@@ -92,28 +93,34 @@ export const INITIAL_SITE_CONTENT = {
     {
       id: 1,
       name: 'Resul Tankılıç',
+      isFounder: true,
+      roleTitle: 'Kurucu Mentör',
       university: 'Boğaziçi Bilgisayar Mühendisliği',
       yksRank: 'YKS 2023 Sayısal TR 42.si',
       field: 'Sayısal & Strateji',
       experience: '3 Yıl Koçluk Deneyimi',
       specialty: 'AYT Matematik & Zaman Yönetimi',
-      bio: 'YKS Sayısal alanında derece yapmış öğrencilerle birebir derece programını yürütmektedir.',
+      bio: 'Altın Koç Akademi Kurucu Koçu. YKS Sayısal alanında derece yapmış öğrencilerle birebir derece programını yürütmektedir.',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
     },
     {
       id: 2,
       name: 'Miraç Üresin',
+      isFounder: true,
+      roleTitle: 'Kurucu Mentör',
       university: 'Hacettepe Üniversitesi Tıp Fakültesi',
       yksRank: 'YKS 2023 Sayısal TR 118.si',
       field: 'Tıp & Fen Bilimleri',
       experience: '3 Yıl Koçluk Deneyimi',
       specialty: 'AYT Fen (Fizik-Kimya-Biyo) ve Motivasyon',
-      bio: 'Tıp hedefleyen öğrencilere özel AYT Fen rutinleri ve deneme stratejileri kurgulamaktadır.',
+      bio: 'Altın Koç Akademi Kurucu Koçu. Tıp hedefleyen öğrencilere özel AYT Fen rutinleri ve deneme stratejileri kurgulamaktadır.',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
     },
     {
       id: 3,
       name: 'Selin Karaca',
+      isFounder: false,
+      roleTitle: 'Derece Mentörü',
       university: 'İTÜ Endüstri Mühendisliği',
       yksRank: 'YKS 2024 Sayısal TR 380.si',
       field: 'Mühendislik & Rutin',
@@ -128,19 +135,11 @@ export const INITIAL_SITE_CONTENT = {
   faqs: [
     {
       q: 'Altın Koç Akademi Koçluk Sistemi Nasıl İşler?',
-      a: 'Kayıt olan öğrencimize ilk olarak 45 dakikalık seviye tespit görüşmesi yapılır. Ardından öğrencinin alanına ve hedeflediği üniversiteye en uygun Türkiye dereceli koç eşleştirilir. Her hafta birebir online analiz toplantısı ve gün aşırı whatsapp takibi yapılır.',
+      a: 'Kayıt olan öğrencimize ilk olarak kurucularımız Resul Tankılıç ve Miraç Üresin ile 45 dakikalık seviye tespit görüşmesi yapılır. Ardından öğrencinin alanına ve hedeflediği üniversiteye en uygun Türkiye dereceli koç eşleştirilir.',
     },
     {
       q: 'Mentörümü Kendim Seçebilir miyim?',
-      a: 'Evet! Mentörlerimiz sayfasından dilediğiniz koç profiliyle eşleşme talep edebilirsiniz. Kontenjan durumuna göre aynı gün koçunuzla tanışabilirsiniz.',
-    },
-    {
-      q: 'Hangi Sınıf Düzeyindeki Öğrenciler Katılabilir?',
-      a: 'Koçluk programlarımız 12. sınıf YKS öğrencileri, Mezun grubu ve 11. sınıf erken derece hazırlık öğrencilerine özel ayrı müfredatlar şeklinde sunulmaktadır.',
-    },
-    {
-      q: 'Deneme Analizleri Nasıl Yapılmaktadır?',
-      a: 'Girdiğiniz kurum ve ev denemelerinin sonuçlarını panelimize girersiniz. Koçunuz netlerinizi ders ve konu bazında grafikleştirerek yapamadığınız soruların konularına yönelik haftalık ödev yüklemesi yapar.',
+      a: 'Evet! Kurucularımız Resul Tankılıç veya Miraç Üresin ya da diğer derece mentörlerimiz arasından dilediğiniz koç profiliyle eşleşme talep edebilirsiniz.',
     },
   ],
 };

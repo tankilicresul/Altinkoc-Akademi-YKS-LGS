@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import BrandLogo from './BrandLogo';
-import { Menu, X, Sparkles, UserCheck, ShieldCheck, ArrowRight, Calculator } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { Menu, X, Sparkles, UserCheck, ShieldCheck, ArrowRight, Calculator, LogIn, LogOut, User } from 'lucide-react';
 
-export default function Navbar({ activeSection, setActiveSection, currentPortalMode, setPortalMode, onOpenApplyModal }) {
+export default function Navbar({ activeSection, setActiveSection, currentPortalMode, setPortalMode, onOpenApplyModal, onOpenAuthModal }) {
+  const { currentUser, isAdmin, isApprovedStudentOrMentor, logout, ADMIN_EMAIL } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -45,7 +47,7 @@ export default function Navbar({ activeSection, setActiveSection, currentPortalM
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo & Slogan Badge */}
+          {/* Logo & Hashtag */}
           <div className="flex items-center gap-3">
             <div onClick={() => handleNavClick('home')}>
               <BrandLogo />
@@ -79,43 +81,66 @@ export default function Navbar({ activeSection, setActiveSection, currentPortalM
             })}
           </nav>
 
-          {/* Portal Switcher & Action Buttons */}
+          {/* USER AUTHENTICATION & ROLE ACCESS CONTROL AREA */}
           <div className="hidden xl:flex items-center gap-3">
-            {/* Mode Selector */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-300">
+            {currentUser ? (
+              <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-2xl border border-slate-300">
+                {/* Active Panel Switcher based on role */}
+                {isAdmin ? (
+                  <button
+                    onClick={() => setPortalMode('admin')}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-black rounded-xl transition ${
+                      currentPortalMode === 'admin'
+                        ? 'bg-[#F26422] text-white shadow-sm'
+                        : 'bg-white text-slate-900 shadow-xs border border-slate-200'
+                    }`}
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#F5A623]" />
+                    <span>Yönetici CMS</span>
+                  </button>
+                ) : isApprovedStudentOrMentor ? (
+                  <button
+                    onClick={() => setPortalMode('student')}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-black rounded-xl transition ${
+                      currentPortalMode === 'student'
+                        ? 'bg-[#F5A623] text-slate-950 shadow-sm'
+                        : 'bg-white text-slate-900 shadow-xs border border-slate-200'
+                    }`}
+                  >
+                    <UserCheck className="w-4 h-4 text-emerald-600" />
+                    <span>Öğrenci Paneli</span>
+                  </button>
+                ) : (
+                  <span className="px-3 py-1.5 text-xs font-bold text-amber-800 bg-amber-50 rounded-xl border border-amber-200">
+                    Onay Bekliyor
+                  </span>
+                )}
+
+                {/* User Info Badge */}
+                <div className="px-3 py-1 text-xs font-black text-slate-800 flex items-center gap-1.5 border-l border-slate-300">
+                  <User className="w-3.5 h-3.5 text-[#F26422]" />
+                  <span className="max-w-[120px] truncate">{currentUser.name}</span>
+                </div>
+
+                {/* Logout Button */}
+                <button
+                  onClick={logout}
+                  className="p-1.5 bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 rounded-xl transition"
+                  title="Çıkış Yap"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              /* Anonymous Visitor: Show Login & Register Button */
               <button
-                onClick={() => setPortalMode('public')}
-                className={`px-3 py-1.5 text-xs font-black rounded-lg transition-all ${
-                  currentPortalMode === 'public'
-                    ? 'bg-white text-slate-950 shadow-sm border border-slate-200'
-                    : 'text-slate-600 hover:text-slate-950'
-                }`}
+                onClick={onOpenAuthModal}
+                className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 font-extrabold px-4 py-2 rounded-xl text-xs border border-slate-300 transition shadow-xs"
               >
-                Tanıtım Sitesi
+                <LogIn className="w-4 h-4 text-[#F26422]" />
+                <span>Giriş Yap / Kaydol</span>
               </button>
-              <button
-                onClick={() => setPortalMode('student')}
-                className={`flex items-center gap-1 px-3 py-1.5 text-xs font-black rounded-lg transition-all ${
-                  currentPortalMode === 'student'
-                    ? 'bg-[#F5A623] text-slate-950 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-950'
-                }`}
-              >
-                <UserCheck className="w-3.5 h-3.5" />
-                Öğrenci Paneli
-              </button>
-              <button
-                onClick={() => setPortalMode('admin')}
-                className={`flex items-center gap-1 px-3 py-1.5 text-xs font-black rounded-lg transition-all ${
-                  currentPortalMode === 'admin'
-                    ? 'bg-[#F26422] text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-950'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                Yönetici CMS
-              </button>
-            </div>
+            )}
 
             <button
               onClick={onOpenApplyModal}
@@ -128,6 +153,14 @@ export default function Navbar({ activeSection, setActiveSection, currentPortalM
 
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-2">
+            {!currentUser && (
+              <button
+                onClick={onOpenAuthModal}
+                className="bg-slate-100 text-slate-900 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-slate-300"
+              >
+                Giriş
+              </button>
+            )}
             <button
               onClick={onOpenApplyModal}
               className="bg-brand-gradient text-slate-950 font-black px-3 py-1.5 rounded-lg text-xs"
@@ -146,31 +179,7 @@ export default function Navbar({ activeSection, setActiveSection, currentPortalM
         {/* Mobile Dropdown Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 p-4 bg-white border-2 border-slate-300 rounded-2xl shadow-2xl space-y-3">
-            <div className="flex items-center justify-between p-2 bg-slate-100 rounded-xl text-xs font-bold border border-slate-300">
-              <span className="text-slate-700">Görünüm Modu:</span>
-              <div className="flex gap-1">
-                <button
-                  onClick={() => { setPortalMode('public'); setMobileMenuOpen(false); }}
-                  className={`px-2 py-1 rounded ${currentPortalMode === 'public' ? 'bg-[#F5A623] text-slate-950 font-bold' : 'text-slate-700'}`}
-                >
-                  Site
-                </button>
-                <button
-                  onClick={() => { setPortalMode('student'); setMobileMenuOpen(false); }}
-                  className={`px-2 py-1 rounded ${currentPortalMode === 'student' ? 'bg-[#F5A623] text-slate-950 font-bold' : 'text-slate-700'}`}
-                >
-                  Öğrenci
-                </button>
-                <button
-                  onClick={() => { setPortalMode('admin'); setMobileMenuOpen(false); }}
-                  className={`px-2 py-1 rounded ${currentPortalMode === 'admin' ? 'bg-[#F26422] text-white font-bold' : 'text-slate-700'}`}
-                >
-                  Admin
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="grid grid-cols-2 gap-2">
               {navLinks.map((link) => (
                 <button
                   key={link.id}
@@ -185,6 +194,20 @@ export default function Navbar({ activeSection, setActiveSection, currentPortalM
                 </button>
               ))}
             </div>
+
+            {currentUser ? (
+              <div className="p-3 bg-slate-100 rounded-xl flex items-center justify-between text-xs font-bold">
+                <span>{currentUser.name} ({currentUser.role})</span>
+                <button onClick={logout} className="text-rose-600 font-black">Çıkış Yap</button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenAuthModal(); }}
+                className="w-full py-3 bg-[#F5A623] text-slate-950 font-black rounded-xl text-center text-sm"
+              >
+                Giriş Yap / Kaydol
+              </button>
+            )}
           </div>
         )}
       </div>

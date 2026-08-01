@@ -78,43 +78,66 @@ export default function ContactSection() {
               <h3 className="text-2xl font-black text-slate-900">İletişim Bilgileri</h3>
 
               <div className="space-y-4 text-sm text-slate-700 font-bold">
-                <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <Phone className="w-6 h-6 text-[#F5A623] shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-extrabold text-slate-900">Telefon & Danışma Hattı</div>
-                    <div className="text-xs text-slate-600 mt-0.5">+90 850 123 45 67</div>
-                    <div className="text-xs text-emerald-600 font-extrabold mt-1">Hafta içi & Hafta sonu 09:00 - 21:00</div>
+                {/* Contact 1: Resul Tankılıç */}
+                <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-black text-slate-900 text-base">Resul Tankılıç</span>
+                    <span className="text-[10px] font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded">Kurucu & Strateji Koçu</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-800 font-extrabold text-sm pt-1">
+                    <Phone className="w-4 h-4 text-[#F26422]" />
+                    <span>0546 895 10 95</span>
                   </div>
                 </div>
 
+                {/* Contact 2: Miraç Üresin */}
+                <div className="p-4 bg-orange-50/60 rounded-2xl border border-orange-200 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-black text-slate-900 text-base">Miraç Üresin</span>
+                    <span className="text-[10px] font-black bg-orange-200 text-orange-900 px-2 py-0.5 rounded">Eğitim Danışmanlığı</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-800 font-extrabold text-sm pt-1">
+                    <Phone className="w-4 h-4 text-[#F5A623]" />
+                    <span>0543 108 52 56</span>
+                  </div>
+                </div>
+
+                {/* Email */}
                 <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <Mail className="w-6 h-6 text-[#F26422] shrink-0 mt-0.5" />
+                  <Mail className="w-5 h-5 text-[#F26422] shrink-0 mt-0.5" />
                   <div>
                     <div className="font-extrabold text-slate-900">E-posta</div>
-                    <div className="text-xs text-slate-600 mt-0.5">iletisim@altinkocakademi.com</div>
-                    <div className="text-xs text-slate-600">basvuru@altinkocakademi.com</div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <MapPin className="w-6 h-6 text-[#F5A623] shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-extrabold text-slate-900">Genel Merkez & Strateji Ofisi</div>
-                    <div className="text-xs text-slate-600 mt-0.5">Maslak Mah. Büyükdere Cad. No:142, Sarıyer / İstanbul</div>
+                    <div className="text-xs text-slate-600 mt-0.5">resultankilic.business@gmail.com</div>
                   </div>
                 </div>
               </div>
 
-              {/* Direct Whatsapp button */}
-              <a
-                href="https://wa.me/905550000000?text=Merhaba,%20Alt%C4%B1n%20Ko%C3%A7%20Akademi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
-                target="_blank"
-                rel="noreferrer"
-                className="w-full flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black px-6 py-4 rounded-2xl text-sm transition shadow-md shadow-emerald-600/20"
-              >
-                <MessageSquare className="w-5 h-5" />
-                <span>Anında WhatsApp Danışmanına Bağlan</span>
-              </a>
+              {/* Direct Whatsapp Buttons */}
+              <div className="space-y-2 pt-2">
+                <div className="text-xs font-black text-slate-700 uppercase tracking-wider">
+                  💬 WhatsApp İle Anında İletişim:
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a
+                    href="https://wa.me/905468951095?text=Merhaba%20Resul%20Hocam,%20Alt%C4%B1n%20Ko%C3%A7%20Akademi%20ko%C3%A7luk%20sistemi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black px-3 py-3 rounded-xl text-xs transition shadow-xs"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Resul Tankılıç</span>
+                  </a>
+                  <a
+                    href="https://wa.me/905431085256?text=Merhaba%20Mira%C3%A7%20Hocam,%20Alt%C4%B1n%20Ko%C3%A7%20Akademi%20ko%C3%A7luk%20sistemi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black px-3 py-3 rounded-xl text-xs transition shadow-xs"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Miraç Üresin</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -148,7 +171,7 @@ export default function ContactSection() {
                         required
                         value={contactData.phone}
                         onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                        placeholder="0555 123 45 67"
+                        placeholder="0546 895 10 95"
                         className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-[#F5A623]"
                       />
                     </div>
@@ -199,7 +222,7 @@ export default function ContactSection() {
                   <CheckCircle className="w-14 h-14 text-[#D97706] mx-auto animate-pulse" />
                   <h4 className="text-2xl font-black text-slate-900">Mesajınız İletildi!</h4>
                   <p className="text-slate-700 text-sm max-w-md mx-auto font-medium">
-                    Tarafımıza ulaştı. Eğitim danışmanlarımız en geç 2 saat içerisinde sizinle telefon üzerinden iletişime geçecektir.
+                    Tarafımıza ulaştı. Eğitim danışmanlarımız Resul Tankılıç veya Miraç Üresin en geç 2 saat içerisinde sizinle iletişime geçecektir.
                   </p>
                   <button
                     onClick={() => setFormSent(false)}

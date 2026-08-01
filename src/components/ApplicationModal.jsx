@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, ArrowRight, ArrowLeft, Sparkles, Send, Phone, Loader2 } from 'lucide-react';
+import { X, CheckCircle, ArrowRight, ArrowLeft, Sparkles, Send, Phone, Loader2, MessageSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 export default function ApplicationModal({ isOpen, onClose }) {
@@ -69,7 +69,7 @@ export default function ApplicationModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-2xl bg-white border border-amber-300 rounded-3xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-2xl bg-white border-2 border-amber-300 rounded-3xl shadow-2xl overflow-hidden">
         {/* Top Header Accent */}
         <div className="h-2 bg-brand-gradient" />
 
@@ -290,7 +290,7 @@ export default function ApplicationModal({ isOpen, onClose }) {
                           required
                           value={formData.phone}
                           onChange={handleChange}
-                          placeholder="0555 123 45 67"
+                          placeholder="0546 895 10 95"
                           className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-900 font-semibold focus:outline-none focus:border-[#F5A623]"
                         />
                       </div>
@@ -363,7 +363,7 @@ export default function ApplicationModal({ isOpen, onClose }) {
 
               <p className="text-slate-700 max-w-md mx-auto font-medium">
                 Tebrikler <strong className="text-[#D97706]">{formData.name || 'Öğrencimiz'}</strong>! 
-                Derece koçlarımız hedefleriniz doğrultusunda başvurunuzu inceleyecek ve 24 saat içerisinde sizinle iletişime geçecektir.
+                Başvurunuz kaydedildi. Anında iletişim için kurucularımızla WhatsApp üzerinden iletişime geçebilirsiniz.
               </p>
 
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 max-w-md mx-auto text-left text-xs text-slate-800 font-semibold space-y-1.5">
@@ -372,23 +372,37 @@ export default function ApplicationModal({ isOpen, onClose }) {
                 <p>📌 <strong>Koç Tercihi:</strong> {formData.coachPreference}</p>
               </div>
 
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a
-                  href={`https://wa.me/905550000000?text=Merhaba,%20Alt%C4%B1n%20Ko%C3%A7%20Akademi'ye%20ba%C5%9Fvurdum.%20Ad%C4%B1m:%20${encodeURIComponent(formData.name)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-6 py-3 rounded-xl transition shadow-md"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>WhatsApp Danışmanına Bağlan</span>
-                </a>
-                <button
-                  onClick={handleReset}
-                  className="w-full sm:w-auto bg-slate-100 text-slate-800 hover:bg-slate-200 font-bold px-6 py-3 rounded-xl transition"
-                >
-                  Kapat
-                </button>
+              <div className="pt-3 space-y-2">
+                <div className="text-xs font-black text-slate-700">💬 WhatsApp İle Anında Görüşün:</div>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <a
+                    href={`https://wa.me/905468951095?text=Merhaba%20Resul%20Hocam,%20Alt%C4%B1n%20Ko%C3%A7%20Akademi'ye%20ba%C5%9Fvurdum.%20Ad%C4%B1m:%20${encodeURIComponent(formData.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-5 py-3 rounded-xl transition shadow-md text-xs"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Resul Tankılıç (0546 895 10 95)</span>
+                  </a>
+
+                  <a
+                    href={`https://wa.me/905431085256?text=Merhaba%20Mira%C3%A7%20Hocam,%20Alt%C4%B1n%20Ko%C3%A7%20Akademi'ye%20ba%C5%9Fvurdum.%20Ad%C4%B1m:%20${encodeURIComponent(formData.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-5 py-3 rounded-xl transition shadow-md text-xs"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Miraç Üresin (0543 108 52 56)</span>
+                  </a>
+                </div>
               </div>
+
+              <button
+                onClick={handleReset}
+                className="mt-4 bg-slate-100 text-slate-800 hover:bg-slate-200 font-bold px-6 py-2.5 rounded-xl transition text-xs"
+              >
+                Kapat
+              </button>
             </div>
           )}
         </div>

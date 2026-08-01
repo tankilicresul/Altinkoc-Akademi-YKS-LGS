@@ -79,19 +79,19 @@ export default function Footer({ setActiveSection, setPortalMode, onOpenApplyMod
 
           {/* Contact Details */}
           <div className="space-y-3">
-            <h4 className="text-slate-900 font-black text-sm uppercase tracking-wider">İletişim</h4>
-            <div className="space-y-2.5 text-sm font-bold">
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#F26422]" />
-                <span>+90 850 123 45 67</span>
+            <h4 className="text-slate-900 font-black text-sm uppercase tracking-wider">İletişim & WhatsApp</h4>
+            <div className="space-y-2 text-xs font-bold">
+              <div className="flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5 text-[#F26422]" />
+                <span>0546 895 10 95 (Resul Tankılıç)</span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#F26422]" />
-                <span>iletisim@altinkocakademi.com</span>
+              <div className="flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5 text-[#F5A623]" />
+                <span>0543 108 52 56 (Miraç Üresin)</span>
               </div>
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#F26422] shrink-0 mt-0.5" />
-                <span>Maslak Mah. Büyükdere Cad. No:142, Sarıyer / İstanbul</span>
+              <div className="flex items-center gap-2 pt-1 text-slate-500">
+                <Mail className="w-3.5 h-3.5 text-slate-400" />
+                <span>resultankilic.business@gmail.com</span>
               </div>
             </div>
           </div>
@@ -100,15 +100,27 @@ export default function Footer({ setActiveSection, setPortalMode, onOpenApplyMod
         {/* Bottom copyright & Socials */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-bold">
           <p>© {new Date().getFullYear()} Altın Koç Akademi. Tüm hakları saklıdır.</p>
-          <div className="flex items-center gap-4">
-            <a href="https://altinkocakademi.com" target="_blank" rel="noreferrer" className="p-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-full transition shadow-xs" title="Web Sitesi">
-              <Globe className="w-4 h-4" />
+          <div className="flex items-center gap-3">
+            <a
+              href="https://wa.me/905468951095"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-xl transition text-xs font-extrabold"
+              title="Resul Tankılıç WhatsApp"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Resul Tankılıç WP</span>
             </a>
-            <a href="https://wa.me/905550000000" target="_blank" rel="noreferrer" className="p-2 bg-white border border-slate-200 hover:bg-slate-100 text-emerald-600 rounded-full transition shadow-xs" title="WhatsApp Destek">
-              <MessageSquare className="w-4 h-4" />
-            </a>
-            <a href="https://wa.me/905550000000" target="_blank" rel="noreferrer" className="p-2 bg-white border border-slate-200 hover:bg-slate-100 text-amber-600 rounded-full transition shadow-xs" title="Hızlı İletişim">
-              <Send className="w-4 h-4" />
+
+            <a
+              href="https://wa.me/905431085256"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-xl transition text-xs font-extrabold"
+              title="Miraç Üresin WhatsApp"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Miraç Üresin WP</span>
             </a>
           </div>
         </div>

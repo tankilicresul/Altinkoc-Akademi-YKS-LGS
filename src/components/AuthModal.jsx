@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { X, Lock, Mail, User, Phone, ShieldCheck, Sparkles, UserCheck, ArrowRight, KeyRound } from 'lucide-react';
 
 export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAuthSuccess }) {
-  const { login, register, ADMIN_EMAIL } = useAuth();
+  const { login, register, ADMIN_EMAILS } = useAuth();
   const [tab, setTab] = useState(defaultTab); // 'login' or 'signup'
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -209,7 +209,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
                     required
                     value={signupData.phone}
                     onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
-                    placeholder="0555 123 45 67"
+                    placeholder="0546 895 10 95"
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-4 py-3 text-sm text-slate-900 font-bold focus:outline-none focus:border-[#F5A623]"
                   />
                 </div>
@@ -241,22 +241,34 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
             </form>
           )}
 
-          {/* DEMO / QUICK LOGIN OPTIONS */}
+          {/* DEMO / QUICK LOGIN OPTIONS FOR BOTH CO-FOUNDERS */}
           <div className="mt-6 pt-5 border-t border-slate-200 space-y-2">
             <div className="text-[11px] font-black text-slate-500 uppercase tracking-wider text-center mb-2">
-              ⚡ Hızlı Test Hesapları İle Giriş Yapın:
+              ⚡ Hızlı Kurucu & Test Girişleri:
             </div>
 
             <button
               type="button"
-              onClick={() => handleQuickLogin(ADMIN_EMAIL)}
+              onClick={() => handleQuickLogin('resultankilic.business@gmail.com')}
               className="w-full flex items-center justify-between p-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-xl text-xs font-black text-amber-900 transition"
             >
               <span className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#F26422]" />
-                <span>Super Admin ({ADMIN_EMAIL})</span>
+                <span>Resul Tankılıç (Kurucu Admin)</span>
               </span>
               <span className="text-[10px] bg-[#F26422] text-white px-2 py-0.5 rounded font-bold">Tam Yetki</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('miracuresin3@gmail.com')}
+              className="w-full flex items-center justify-between p-2.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 rounded-xl text-xs font-black text-amber-900 transition"
+            >
+              <span className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#F5A623]" />
+                <span>Miraç Üresin (Kurucu Admin)</span>
+              </span>
+              <span className="text-[10px] bg-[#F5A623] text-slate-950 px-2 py-0.5 rounded font-bold">Tam Yetki</span>
             </button>
 
             <button
@@ -269,18 +281,6 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login', onAut
                 <span>Onaylı Öğrenci (Ahmet Yılmaz)</span>
               </span>
               <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded font-bold">Öğrenci Paneli</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('kaan@example.com')}
-              className="w-full flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 transition"
-            >
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#F5A623]" />
-                <span>Onaylı Mentör (Kaan Yıldırım)</span>
-              </span>
-              <span className="text-[10px] bg-[#F5A623] text-slate-950 px-2 py-0.5 rounded font-bold">Mentör Paneli</span>
             </button>
           </div>
 

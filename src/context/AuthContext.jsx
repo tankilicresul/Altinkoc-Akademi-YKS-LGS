@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
-const ADMIN_EMAIL = 'resultankilic.business@gmail.com';
+const ADMIN_EMAILS = [
+  'resultankilic.business@gmail.com',
+  'miracuresin3@gmail.com',
+];
 
 const AuthContext = createContext();
 
@@ -24,10 +27,19 @@ export function AuthProvider({ children }) {
     return [
       {
         id: 'admin-1',
-        name: 'Resul Tanrıkulu (Sistem Yöneticisi)',
-        email: ADMIN_EMAIL,
+        name: 'Resul Tankılıç (Kurucu & Super Admin)',
+        email: 'resultankilic.business@gmail.com',
         role: 'admin',
-        phone: '0555 000 00 00',
+        phone: '0546 895 10 95',
+        status: 'Approved',
+        createdAt: '2026-08-01',
+      },
+      {
+        id: 'admin-2',
+        name: 'Miraç Üresin (Kurucu & Super Admin)',
+        email: 'miracuresin3@gmail.com',
+        role: 'admin',
+        phone: '0543 108 52 56',
         status: 'Approved',
         createdAt: '2026-08-01',
       },
@@ -67,9 +79,15 @@ export function AuthProvider({ children }) {
     localStorage.setItem('altin_koc_users_list', JSON.stringify(registeredUsers));
   }, [registeredUsers]);
 
+  const checkIsAdmin = (email) => {
+    if (!email) return false;
+    return ADMIN_EMAILS.some(a => a.toLowerCase() === email.trim().toLowerCase());
+  };
+
   // Login function
   const login = async (email, password) => {
     const cleanEmail = email.trim().toLowerCase();
+    const isAdminUser = checkIsAdmin(cleanEmail);
 
     // Check Supabase if configured
     if (supabase) {
@@ -79,11 +97,11 @@ export function AuthProvider({ children }) {
           password: password,
         });
         if (!error && data?.user) {
-          const userRole = cleanEmail === ADMIN_EMAIL.toLowerCase() ? 'admin' : 'student';
+          const userRole = isAdminUser ? 'admin' : 'student';
           const userObj = {
             id: data.user.id,
             email: cleanEmail,
-            name: data.user.user_metadata?.name || cleanEmail.split('@')[0],
+            name: data.user.user_metadata?.name || (cleanEmail.includes('mirac') ? 'Miraç Üresin (Kurucu)' : cleanEmail.includes('resul') ? 'Resul Tankılıç (Kurucu)' : cleanEmail.split('@')[0]),
             role: userRole,
           };
           setCurrentUser(userObj);
@@ -97,11 +115,15 @@ export function AuthProvider({ children }) {
     // Local Auth Handling
     const existing = registeredUsers.find((u) => u.email.toLowerCase() === cleanEmail);
 
-    if (cleanEmail === ADMIN_EMAIL.toLowerCase()) {
+    if (isAdminUser) {
+      const adminName = cleanEmail.includes('mirac')
+        ? 'Miraç Üresin (Kurucu & Super Admin)'
+        : 'Resul Tankılıç (Kurucu & Super Admin)';
+
       const adminObj = {
-        id: 'admin-super',
-        name: 'Resul Tanrıkulu (Super Admin)',
-        email: ADMIN_EMAIL,
+        id: 'admin-' + (cleanEmail.includes('mirac') ? 'mirac' : 'resul'),
+        name: adminName,
+        email: cleanEmail,
         role: 'admin',
         status: 'Approved',
       };
@@ -132,15 +154,15 @@ export function AuthProvider({ children }) {
   // Register function
   const register = async ({ name, email, phone, rolePreference }) => {
     const cleanEmail = email.trim().toLowerCase();
-    const isAdmin = cleanEmail === ADMIN_EMAIL.toLowerCase();
+    const isAdminUser = checkIsAdmin(cleanEmail);
 
     const newUser = {
       id: 'user-' + Date.now(),
       name: name || cleanEmail.split('@')[0],
       email: cleanEmail,
       phone: phone || '',
-      role: isAdmin ? 'admin' : (rolePreference || 'student'),
-      status: isAdmin ? 'Approved' : 'Pending', // Admin auto approved, others approved by admin
+      role: isAdminUser ? 'admin' : (rolePreference || 'student'),
+      status: isAdminUser ? 'Approved' : 'Pending',
       createdAt: new Date().toISOString().split('T')[0],
     };
 
@@ -167,7 +189,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const isAdmin = currentUser?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || currentUser?.role === 'admin';
+  const isAdmin = checkIsAdmin(currentUser?.email) || currentUser?.role === 'admin';
   const isApprovedStudentOrMentor = Boolean(currentUser && (currentUser.role === 'student' || currentUser.role === 'mentor' || currentUser.role === 'admin'));
 
   return (
@@ -181,7 +203,8 @@ export function AuthProvider({ children }) {
         register,
         logout,
         updateUserRole,
-        ADMIN_EMAIL,
+        ADMIN_EMAILS,
+        checkIsAdmin,
       }}
     >
       {children}

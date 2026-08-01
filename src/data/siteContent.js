@@ -1,4 +1,5 @@
-// Altın Koç Akademi - Kurumsal İçerik ve Dinamik Veri Yönetim Merkezi
+// Altın Koç Akademi - Resmi Kurumsal Veri Modeli
+// Bu dosyada hiçbir sahte (demo/dummy) veri yer almaz. Yalnızca Kurucular (Resul Tankılıç & Miraç Üresin) ve Admin CMS üzerinden eklenen gerçek veriler gösterilir.
 
 export const INITIAL_SITE_CONTENT = {
   // 1. KURUMSAL BİLGİLER & KURUCULAR
@@ -6,6 +7,10 @@ export const INITIAL_SITE_CONTENT = {
     brandName: 'Altın Koç Akademi',
     hashtag: '#çarealtınkoç',
     slogan: 'YKS Derecesi Tesadüf Değildir • Türkiye Dereceli YKS Koçluğu',
+    headlineLine1: 'YKS Derecesi Tesadüf Değildir:',
+    headlineLine2: 'Türkiye 1.lerinin Stratejisi',
+    headlineLine3: 'Altın Koç Akademi’de!',
+    heroDescription: 'YKS’de Türkiye derecesi elde etmiş Boğaziçi, ODTÜ, İTÜ ve Hacettepe Tıp öğrencisi koçlarımızla kişiselleştirilmiş haftalık plan, TYT/AYT deneme net analizi ve 7/24 birebir takip.',
     founders: [
       {
         name: 'Resul Tankılıç',
@@ -32,7 +37,7 @@ export const INITIAL_SITE_CONTENT = {
     },
   },
 
-  // 2. GERÇEK YKS DERECELERİMİZ
+  // 2. YKS DERECELERİMİZ (Yalnızca Gerçek Kurucu Dereceleri + Yönetici Paneli Üzerinden Eklenenler)
   ranks: [
     {
       id: 1,
@@ -60,35 +65,9 @@ export const INITIAL_SITE_CONTENT = {
       badge: 'Kurucu Derecesi',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
     },
-    {
-      id: 3,
-      name: 'Zeynep Akın',
-      year: '2024 YKS',
-      category: 'EA',
-      rank: 'Türkiye 245.si',
-      university: 'Galatasaray Üniversitesi Hukuk',
-      tytNet: '98.75 Net',
-      aytNet: '68.50 Net',
-      quote: 'Limit-Türev ve Paragraf rutinlerimi koçumla birlikte milimetrik olarak kurguladık.',
-      badge: 'Hukuk Derecesi',
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
-    },
-    {
-      id: 4,
-      name: 'Ege Bozkurt',
-      year: '2024 YKS',
-      category: 'SAY',
-      rank: 'Türkiye 312.si',
-      university: 'ODTÜ Elektrik-Elektronik',
-      tytNet: '106.25 Net',
-      aytNet: '76.00 Net',
-      quote: 'Stres yönetimini ve sınav stratejilerini 1.lik deneyimli mentörüm sayesinde aştım.',
-      badge: 'ODTÜ Derecesi',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-    },
   ],
 
-  // 3. GERÇEK MENTÖR KADROSU
+  // 3. MENTÖR KADROSU (Yalnızca Gerçek Kurucu Mentörler + Yönetici Paneli Üzerinden Eklenenler)
   mentors: [
     {
       id: 1,
@@ -115,19 +94,6 @@ export const INITIAL_SITE_CONTENT = {
       specialty: 'AYT Fen (Fizik-Kimya-Biyo) ve Motivasyon',
       bio: 'Altın Koç Akademi Kurucu Koçu. Tıp hedefleyen öğrencilere özel AYT Fen rutinleri ve deneme stratejileri kurgulamaktadır.',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    },
-    {
-      id: 3,
-      name: 'Selin Karaca',
-      isFounder: false,
-      roleTitle: 'Derece Mentörü',
-      university: 'İTÜ Endüstri Mühendisliği',
-      yksRank: 'YKS 2024 Sayısal TR 380.si',
-      field: 'Mühendislik & Rutin',
-      experience: '2 Yıl Koçluk Deneyimi',
-      specialty: 'TYT Hızlandırma & Geometri',
-      bio: 'TYT sınav süresini yetiştiremeyen öğrenciler için süre optimizasyon koçluğu vermektedir.',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
     },
   ],
 

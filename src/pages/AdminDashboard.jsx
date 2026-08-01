@@ -6,9 +6,9 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 export default function AdminDashboard() {
   const { currentUser, registeredUsers, updateUserRole, ADMIN_EMAILS } = useAuth();
-  const { siteConfig, updateSiteConfig, updateInfoField, updateStatsField, resetToDefault } = useSiteConfig();
+  const { siteConfig, updateSiteConfig, resetToDefault } = useSiteConfig();
 
-  const [activeTab, setActiveTab] = useState('textEditor'); // textEditor, contactEditor, ranks, mentors, users, applications
+  const [activeTab, setActiveTab] = useState('applications'); // textEditor, contactEditor, ranks, mentors, users, applications
   const [isLoading, setIsLoading] = useState(false);
   const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
 
@@ -17,11 +17,7 @@ export default function AdminDashboard() {
   const [ranksForm, setRanksForm] = useState(siteConfig.ranks || []);
   const [mentorsForm, setMentorsForm] = useState(siteConfig.mentors || []);
 
-  const [applications, setApplications] = useState([
-    { id: 101, name: 'Zeynep Akın', phone: '0532 987 65 43', field: 'Sayısal', targetRank: 'İlk 1000', tytNet: '82.50', aytNet: '54.00', coachPreference: 'Boğaziçi Mühendislik', status: 'Beklemede', created_at: 'Bugün 10:20' },
-    { id: 102, name: 'Murat Arslan', phone: '0544 123 99 88', field: 'Eşit Ağırlık', targetRank: 'İlk 500', tytNet: '76.00', aytNet: '48.50', coachPreference: 'Hukuk Koçu', status: 'Beklemede', created_at: 'Bugün 09:15' },
-    { id: 103, name: 'Selin Güneş', phone: '0555 444 33 22', field: 'Sayısal', targetRank: 'İlk 100', tytNet: '98.00', aytNet: '68.00', coachPreference: 'Tıp Koçu', status: 'Onaylandı', created_at: 'Dün 16:40' },
-  ]);
+  const [applications, setApplications] = useState([]);
 
   useEffect(() => {
     setInfoForm(siteConfig.info);
@@ -124,7 +120,7 @@ export default function AdminDashboard() {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         const formatted = data.map(item => ({
           id: item.id,
           name: item.name,
@@ -183,7 +179,7 @@ export default function AdminDashboard() {
                 </span>
               </div>
               <p className="text-xs text-slate-600 font-bold mt-1">
-                Hoş geldiniz <strong>{currentUser?.name || 'Kurucumuz'}</strong>! Web sitesindeki her harfi, görseli, mentörü, telefonu ve dereceyi buradan değiştirebilirsiniz.
+                Hoş geldiniz <strong>{currentUser?.name || 'Kurucumuz'}</strong>! Sitede yalnızca sizin eklediğiniz gerçek veriler görüntülenir.
               </p>
             </div>
           </div>
@@ -206,12 +202,12 @@ export default function AdminDashboard() {
         {/* CMS TAB NAVIGATION */}
         <div className="flex flex-wrap bg-white p-2 rounded-2xl border border-slate-300 shadow-xs gap-1">
           {[
+            { id: 'applications', label: `📥 Gelen Başvurular (${applications.length})`, icon: FileText },
+            { id: 'users', label: `🔑 Kullanıcı Yetkileri (${registeredUsers.length})`, icon: Key },
+            { id: 'ranks', label: `🏆 Derecelerimiz (${ranksForm.length})`, icon: Trophy },
+            { id: 'mentors', label: `🎓 Mentör Kadrosu (${mentorsForm.length})`, icon: Users },
             { id: 'textEditor', label: '📢 Genel Metinler & Sloganlar', icon: Type },
-            { id: 'contactEditor', label: '📱 İletişim & Kurucu Bilgileri', icon: Phone },
-            { id: 'ranks', label: '🏆 Derecelerimizi Düzenle', icon: Trophy },
-            { id: 'mentors', label: '🎓 Mentör Kadrosunu Düzenle', icon: Users },
-            { id: 'users', label: '🔑 Kullanıcı Yetkileri', icon: Key },
-            { id: 'applications', label: '📥 Gelen Başvurular', icon: FileText },
+            { id: 'contactEditor', label: '📱 İletişim & Numaralar', icon: Phone },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -232,204 +228,183 @@ export default function AdminDashboard() {
           })}
         </div>
 
-        {/* TAB 1: GENEL METİNLER VE SLOGANLAR */}
-        {activeTab === 'textEditor' && (
-          <form onSubmit={handleSaveInfo} className="glass-panel-interactive border-2 border-amber-300 rounded-3xl p-6 bg-white space-y-6 shadow-md">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+        {/* TAB: GELEN BAŞVURULAR */}
+        {activeTab === 'applications' && (
+          <div className="glass-panel-interactive border border-slate-200 rounded-3xl p-6 space-y-4 bg-white shadow-sm">
+            <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                <Type className="w-5 h-5 text-[#F26422]" />
-                <span>Sitedeki Başlık, Metin ve Sloganları Harf Harf Düzenleyin</span>
+                <FileText className="w-5 h-5 text-[#F26422]" />
+                <span>Web Sitesinden Gelen Canlı Başvurular</span>
               </h3>
               <button
-                type="submit"
-                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-6 py-2.5 rounded-xl text-xs shadow-md transition hover:scale-105"
+                onClick={fetchSupabaseApplications}
+                className="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200"
               >
-                <Save className="w-4 h-4" />
-                <span>Değişiklikleri Canlıya Kaydet</span>
+                <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                <span>Yenile</span>
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1.5">Marka Adı</label>
-                <input
-                  type="text"
-                  value={infoForm.brandName || ''}
-                  onChange={(e) => setInfoForm({ ...infoForm, brandName: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:border-[#F5A623]"
-                />
+            {applications.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs text-slate-700">
+                  <thead className="bg-slate-50 text-slate-900 uppercase font-black border-b border-slate-200">
+                    <tr>
+                      <th className="p-3">Ad Soyad</th>
+                      <th className="p-3">Telefon</th>
+                      <th className="p-3">Alan / Hedef</th>
+                      <th className="p-3">TYT / AYT Net</th>
+                      <th className="p-3">Koç Tercihi</th>
+                      <th className="p-3">Durum</th>
+                      <th className="p-3 text-right">İşlemler</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 font-bold">
+                    {applications.map((app) => (
+                      <tr key={app.id} className="hover:bg-slate-50 transition">
+                        <td className="p-3 font-black text-slate-900">{app.name}</td>
+                        <td className="p-3">{app.phone}</td>
+                        <td className="p-3">
+                          <span className="px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] font-black text-[#D97706]">
+                            {app.field} - {app.targetRank}
+                          </span>
+                        </td>
+                        <td className="p-3 font-black text-slate-900">
+                          {app.tytNet} TYT / {app.aytNet} AYT
+                        </td>
+                        <td className="p-3 text-slate-600 font-semibold">{app.coachPreference}</td>
+                        <td className="p-3">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
+                              app.status === 'Onaylandı'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : app.status === 'İptal Edildi'
+                                ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                                : 'bg-amber-100 text-amber-900 border border-amber-300'
+                            }`}
+                          >
+                            {app.status}
+                          </span>
+                        </td>
+                        <td className="p-3 text-right space-x-2">
+                          <button
+                            onClick={() => handleApprove(app.id)}
+                            className="p-1.5 bg-emerald-100 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg transition"
+                            title="Onayla & Öğrenci Yap"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleReject(app.id)}
+                            className="p-1.5 bg-rose-100 hover:bg-rose-600 text-rose-700 hover:text-white rounded-lg transition"
+                            title="İptal Et"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1.5">Hashtag (#)</label>
-                <input
-                  type="text"
-                  value={infoForm.hashtag || ''}
-                  onChange={(e) => setInfoForm({ ...infoForm, hashtag: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:border-[#F5A623]"
-                />
+            ) : (
+              <div className="p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 text-xs font-bold text-slate-600 space-y-1">
+                <p>Henüz gelen canlı başvuru bulunmamaktadır.</p>
+                <p className="text-[11px] text-slate-400">Öğrenciler başvuru formunu doldurdukça buraya anında yansıyacaktır.</p>
               </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-slate-800 mb-1.5">Ana Slogan</label>
-                <input
-                  type="text"
-                  value={infoForm.slogan || ''}
-                  onChange={(e) => setInfoForm({ ...infoForm, slogan: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:border-[#F5A623]"
-                />
-              </div>
-            </div>
-
-            {/* İstatistikler */}
-            <div className="pt-4 border-t border-slate-200 space-y-4">
-              <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
-                <BarChart2 className="w-4 h-4 text-[#D97706]" />
-                <span>Anasayfa İstatistik ve Metrikleri</span>
-              </h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Şampiyon Derecesi</label>
-                  <input
-                    type="text"
-                    value={infoForm.stats?.topRankCount || ''}
-                    onChange={(e) => setInfoForm({ ...infoForm, stats: { ...infoForm.stats, topRankCount: e.target.value } })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Öğrenci Sayısı</label>
-                  <input
-                    type="text"
-                    value={infoForm.stats?.totalStudents || ''}
-                    onChange={(e) => setInfoForm({ ...infoForm, stats: { ...infoForm.stats, totalStudents: e.target.value } })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Ortalama Net Artışı</label>
-                  <input
-                    type="text"
-                    value={infoForm.stats?.netIncreaseAvg || ''}
-                    onChange={(e) => setInfoForm({ ...infoForm, stats: { ...infoForm.stats, netIncreaseAvg: e.target.value } })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Memnuniyet Oranı</label>
-                  <input
-                    type="text"
-                    value={infoForm.stats?.satisfactionRate || ''}
-                    onChange={(e) => setInfoForm({ ...infoForm, stats: { ...infoForm.stats, satisfactionRate: e.target.value } })}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-8 py-3 rounded-xl text-sm shadow-md transition hover:scale-105"
-              >
-                <Save className="w-4 h-4" />
-                <span>Değişiklikleri Canlıya Kaydet</span>
-              </button>
-            </div>
-          </form>
+            )}
+          </div>
         )}
 
-        {/* TAB 2: İLETİŞİM VE KURUCU BİLGİLERİ DÜZENLEME */}
-        {activeTab === 'contactEditor' && (
-          <form onSubmit={handleSaveInfo} className="glass-panel-interactive border-2 border-amber-300 rounded-3xl p-6 bg-white space-y-6 shadow-md">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                <Phone className="w-5 h-5 text-[#F26422]" />
-                <span>Kurucu Telefonları, E-postaları ve WhatsApp İletişim Bilgileri</span>
-              </h3>
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-6 py-2.5 rounded-xl text-xs shadow-md transition hover:scale-105"
-              >
-                <Save className="w-4 h-4" />
-                <span>İletişim Bilgilerini Kaydet</span>
-              </button>
+        {/* TAB: KULLANICI ROLLERİ & YETKİLENDİRME */}
+        {activeTab === 'users' && (
+          <div className="glass-panel-interactive border border-slate-200 rounded-3xl p-6 space-y-4 bg-white shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <Key className="w-5 h-5 text-[#F5A623]" />
+                  <span>Kullanıcı Erişim ve Rol Yetki Yönetimi</span>
+                </h3>
+                <p className="text-xs text-slate-600 font-bold mt-1">
+                  Sisteme kaydolmuş gerçek kişilere Öğrenci Paneli, Mentör Paneli veya Adminlik erişimi verebilirsiniz.
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-6">
-              {infoForm.founders?.map((founder, index) => (
-                <div key={index} className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
-                  <div className="font-black text-slate-900 text-sm flex items-center gap-2">
-                    <Star className="w-4 h-4 text-amber-500 fill-amber-400" />
-                    <span>{founder.name} ({founder.title})</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Kurucu İsim Soyisim</label>
-                      <input
-                        type="text"
-                        value={founder.name}
-                        onChange={(e) => {
-                          const updated = [...infoForm.founders];
-                          updated[index].name = e.target.value;
-                          setInfoForm({ ...infoForm, founders: updated });
-                        }}
-                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Unvan</label>
-                      <input
-                        type="text"
-                        value={founder.title}
-                        onChange={(e) => {
-                          const updated = [...infoForm.founders];
-                          updated[index].title = e.target.value;
-                          setInfoForm({ ...infoForm, founders: updated });
-                        }}
-                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Telefon Numarası</label>
-                      <input
-                        type="text"
-                        value={founder.phone}
-                        onChange={(e) => {
-                          const updated = [...infoForm.founders];
-                          updated[index].phone = e.target.value;
-                          setInfoForm({ ...infoForm, founders: updated });
-                        }}
-                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 text-slate-900 uppercase font-black border-b border-slate-200">
+                  <tr>
+                    <th className="p-3">Kullanıcı Adı</th>
+                    <th className="p-3">E-posta</th>
+                    <th className="p-3">Telefon</th>
+                    <th className="p-3">Mevcut Rolü</th>
+                    <th className="p-3">Erişim Durumu</th>
+                    <th className="p-3 text-right">Rol Değiştir & Yetkilendir</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 font-bold">
+                  {registeredUsers.map((u) => (
+                    <tr key={u.id} className="hover:bg-slate-50 transition">
+                      <td className="p-3 font-black text-slate-900 flex items-center gap-2">
+                        {ADMIN_EMAILS.includes(u.email) && <Star className="w-4 h-4 text-amber-500 fill-amber-400" />}
+                        <span>{u.name}</span>
+                      </td>
+                      <td className="p-3 font-semibold text-slate-800">{u.email}</td>
+                      <td className="p-3">{u.phone || '-'}</td>
+                      <td className="p-3">
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
+                            u.role === 'admin'
+                              ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                              : u.role === 'mentor'
+                              ? 'bg-purple-100 text-purple-800 border border-purple-300'
+                              : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                          }`}
+                        >
+                          {u.role === 'admin' ? '🛡️ Kurucu / Yönetici' : u.role === 'mentor' ? '🎓 Mentör / Koç' : '👤 Öğrenci'}
+                        </span>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-300 text-[10px]">
+                          {u.status || 'Approved'}
+                        </span>
+                      </td>
+                      <td className="p-3 text-right space-x-1">
+                        <button
+                          onClick={() => updateUserRole(u.id, 'student', 'Approved')}
+                          className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg border border-emerald-300 text-[11px] font-black transition"
+                        >
+                          + Öğrenci Yap
+                        </button>
+                        <button
+                          onClick={() => updateUserRole(u.id, 'mentor', 'Approved')}
+                          className="px-2.5 py-1 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white rounded-lg border border-purple-300 text-[11px] font-black transition"
+                        >
+                          + Mentör Yap
+                        </button>
+                        <button
+                          onClick={() => updateUserRole(u.id, 'admin', 'Approved')}
+                          className="px-2.5 py-1 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white rounded-lg border border-rose-300 text-[11px] font-black transition"
+                        >
+                          + Admin Yap
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-
-            <div className="flex justify-end pt-4">
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-8 py-3 rounded-xl text-sm shadow-md transition hover:scale-105"
-              >
-                <Save className="w-4 h-4" />
-                <span>İletişim Bilgilerini Kaydet</span>
-              </button>
-            </div>
-          </form>
+          </div>
         )}
 
-        {/* TAB 3: GERÇEK DERECELERİMİZ DÜZENLEME */}
+        {/* TAB: DERECELERİMİZ DÜZENLEME */}
         {activeTab === 'ranks' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
               <div>
-                <h3 className="text-lg font-black text-slate-900">Sitedeki Gerçek YKS Dereceleri (Harf Harf Düzenleyin)</h3>
-                <p className="text-xs text-slate-600 font-bold">Yapılan tüm değişiklikler anında web sitesindeki şampiyonlar tablosuna yansır.</p>
+                <h3 className="text-lg font-black text-slate-900">Sitedeki Gerçek YKS Dereceleri</h3>
+                <p className="text-xs text-slate-600 font-bold">Yeni eklediğiniz gerçek dereceler anında web sitesine yansır.</p>
               </div>
               <div className="flex gap-2">
                 <button
@@ -552,13 +527,13 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TAB 4: MENTÖR KADROSU DÜZENLEME */}
+        {/* TAB: MENTÖR KADROSU DÜZENLEME */}
         {activeTab === 'mentors' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
               <div>
-                <h3 className="text-lg font-black text-slate-900">Sitedeki Mentör Kadrosu (Harf Harf Düzenleyin)</h3>
-                <p className="text-xs text-slate-600 font-bold">Fotoğraflarını, isimlerini, uzmanlık biyografilerini anında değiştirin.</p>
+                <h3 className="text-lg font-black text-slate-900">Sitedeki Mentör Kadrosu</h3>
+                <p className="text-xs text-slate-600 font-bold">Yeni mentör ekleyebilir veya mevcut koçları düzenleyebilirsiniz.</p>
               </div>
               <div className="flex gap-2">
                 <button
@@ -681,167 +656,149 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TAB 5: KULLANICI ROLLERİ & YETKİLENDİRME */}
-        {activeTab === 'users' && (
-          <div className="glass-panel-interactive border border-slate-200 rounded-3xl p-6 space-y-4 bg-white shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                  <Key className="w-5 h-5 text-[#F5A623]" />
-                  <span>Kullanıcı Erişim ve Rol Yetki Yönetimi</span>
-                </h3>
-                <p className="text-xs text-slate-600 font-bold mt-1">
-                  Sisteme kaydolmuş kişilere Öğrenci Paneli, Mentör Paneli veya Adminlik erişimi verebilirsiniz.
-                </p>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-700">
-                <thead className="bg-slate-50 text-slate-900 uppercase font-black border-b border-slate-200">
-                  <tr>
-                    <th className="p-3">Kullanıcı Adı</th>
-                    <th className="p-3">E-posta</th>
-                    <th className="p-3">Telefon</th>
-                    <th className="p-3">Mevcut Rolü</th>
-                    <th className="p-3">Erişim Durumu</th>
-                    <th className="p-3 text-right">Rol Değiştir & Yetkilendir</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 font-bold">
-                  {registeredUsers.map((u) => (
-                    <tr key={u.id} className="hover:bg-slate-50 transition">
-                      <td className="p-3 font-black text-slate-900 flex items-center gap-2">
-                        {ADMIN_EMAILS.includes(u.email) && <Star className="w-4 h-4 text-amber-500 fill-amber-400" />}
-                        <span>{u.name}</span>
-                      </td>
-                      <td className="p-3 font-semibold text-slate-800">{u.email}</td>
-                      <td className="p-3">{u.phone || '-'}</td>
-                      <td className="p-3">
-                        <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                            u.role === 'admin'
-                              ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                              : u.role === 'mentor'
-                              ? 'bg-purple-100 text-purple-800 border border-purple-300'
-                              : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                          }`}
-                        >
-                          {u.role === 'admin' ? '🛡️ Kurucu / Yönetici' : u.role === 'mentor' ? '🎓 Mentör / Koç' : '👤 Öğrenci'}
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-300 text-[10px]">
-                          {u.status || 'Approved'}
-                        </span>
-                      </td>
-                      <td className="p-3 text-right space-x-1">
-                        <button
-                          onClick={() => updateUserRole(u.id, 'student', 'Approved')}
-                          className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg border border-emerald-300 text-[11px] font-black transition"
-                        >
-                          + Öğrenci Yap
-                        </button>
-                        <button
-                          onClick={() => updateUserRole(u.id, 'mentor', 'Approved')}
-                          className="px-2.5 py-1 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white rounded-lg border border-purple-300 text-[11px] font-black transition"
-                        >
-                          + Mentör Yap
-                        </button>
-                        <button
-                          onClick={() => updateUserRole(u.id, 'admin', 'Approved')}
-                          className="px-2.5 py-1 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white rounded-lg border border-rose-300 text-[11px] font-black transition"
-                        >
-                          + Admin Yap
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 6: GELEN BAŞVURULAR */}
-        {activeTab === 'applications' && (
-          <div className="glass-panel-interactive border border-slate-200 rounded-3xl p-6 space-y-4 bg-white shadow-sm">
-            <div className="flex items-center justify-between mb-4">
+        {/* TAB: GENEL METİNLER */}
+        {activeTab === 'textEditor' && (
+          <form onSubmit={handleSaveInfo} className="glass-panel-interactive border-2 border-amber-300 rounded-3xl p-6 bg-white space-y-6 shadow-md">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-[#F26422]" />
-                <span>Web Sitesinden Gelen Canlı Başvurular</span>
+                <Type className="w-5 h-5 text-[#F26422]" />
+                <span>Sitedeki Başlık, Metin ve Sloganları Düzenleyin</span>
               </h3>
               <button
-                onClick={fetchSupabaseApplications}
-                className="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200"
+                type="submit"
+                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-6 py-2.5 rounded-xl text-xs shadow-md transition hover:scale-105"
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-                <span>Yenile</span>
+                <Save className="w-4 h-4" />
+                <span>Değişiklikleri Canlıya Kaydet</span>
               </button>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-700">
-                <thead className="bg-slate-50 text-slate-900 uppercase font-black border-b border-slate-200">
-                  <tr>
-                    <th className="p-3">Ad Soyad</th>
-                    <th className="p-3">Telefon</th>
-                    <th className="p-3">Alan / Hedef</th>
-                    <th className="p-3">TYT / AYT Net</th>
-                    <th className="p-3">Koç Tercihi</th>
-                    <th className="p-3">Durum</th>
-                    <th className="p-3 text-right">İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200 font-bold">
-                  {applications.map((app) => (
-                    <tr key={app.id} className="hover:bg-slate-50 transition">
-                      <td className="p-3 font-black text-slate-900">{app.name}</td>
-                      <td className="p-3">{app.phone}</td>
-                      <td className="p-3">
-                        <span className="px-2 py-1 bg-amber-50 border border-amber-200 rounded text-[11px] font-black text-[#D97706]">
-                          {app.field} - {app.targetRank}
-                        </span>
-                      </td>
-                      <td className="p-3 font-black text-slate-900">
-                        {app.tytNet} TYT / {app.aytNet} AYT
-                      </td>
-                      <td className="p-3 text-slate-600 font-semibold">{app.coachPreference}</td>
-                      <td className="p-3">
-                        <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                            app.status === 'Onaylandı'
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                              : app.status === 'İptal Edildi'
-                              ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                              : 'bg-amber-100 text-amber-900 border border-amber-300'
-                          }`}
-                        >
-                          {app.status}
-                        </span>
-                      </td>
-                      <td className="p-3 text-right space-x-2">
-                        <button
-                          onClick={() => handleApprove(app.id)}
-                          className="p-1.5 bg-emerald-100 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg transition"
-                          title="Onayla & Öğrenci Yap"
-                        >
-                          <Check className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleReject(app.id)}
-                          className="p-1.5 bg-rose-100 hover:bg-rose-600 text-rose-700 hover:text-white rounded-lg transition"
-                          title="İptal Et"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-800 mb-1.5">Marka Adı</label>
+                <input
+                  type="text"
+                  value={infoForm.brandName || ''}
+                  onChange={(e) => setInfoForm({ ...infoForm, brandName: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:border-[#F5A623]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-800 mb-1.5">Hashtag (#)</label>
+                <input
+                  type="text"
+                  value={infoForm.hashtag || ''}
+                  onChange={(e) => setInfoForm({ ...infoForm, hashtag: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:border-[#F5A623]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-slate-800 mb-1.5">Ana Slogan</label>
+                <input
+                  type="text"
+                  value={infoForm.slogan || ''}
+                  onChange={(e) => setInfoForm({ ...infoForm, slogan: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:border-[#F5A623]"
+                />
+              </div>
             </div>
-          </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                type="submit"
+                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-8 py-3 rounded-xl text-sm shadow-md transition hover:scale-105"
+              >
+                <Save className="w-4 h-4" />
+                <span>Değişiklikleri Canlıya Kaydet</span>
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* TAB: İLETİŞİM */}
+        {activeTab === 'contactEditor' && (
+          <form onSubmit={handleSaveInfo} className="glass-panel-interactive border-2 border-amber-300 rounded-3xl p-6 bg-white space-y-6 shadow-md">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+              <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                <Phone className="w-5 h-5 text-[#F26422]" />
+                <span>Kurucu Telefonları ve WhatsApp İletişim Bilgileri</span>
+              </h3>
+              <button
+                type="submit"
+                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-6 py-2.5 rounded-xl text-xs shadow-md transition hover:scale-105"
+              >
+                <Save className="w-4 h-4" />
+                <span>İletişim Bilgilerini Kaydet</span>
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {infoForm.founders?.map((founder, index) => (
+                <div key={index} className="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+                  <div className="font-black text-slate-900 text-sm flex items-center gap-2">
+                    <Star className="w-4 h-4 text-amber-500 fill-amber-400" />
+                    <span>{founder.name} ({founder.title})</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Kurucu İsim Soyisim</label>
+                      <input
+                        type="text"
+                        value={founder.name}
+                        onChange={(e) => {
+                          const updated = [...infoForm.founders];
+                          updated[index].name = e.target.value;
+                          setInfoForm({ ...infoForm, founders: updated });
+                        }}
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Unvan</label>
+                      <input
+                        type="text"
+                        value={founder.title}
+                        onChange={(e) => {
+                          const updated = [...infoForm.founders];
+                          updated[index].title = e.target.value;
+                          setInfoForm({ ...infoForm, founders: updated });
+                        }}
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Telefon Numarası</label>
+                      <input
+                        type="text"
+                        value={founder.phone}
+                        onChange={(e) => {
+                          const updated = [...infoForm.founders];
+                          updated[index].phone = e.target.value;
+                          setInfoForm({ ...infoForm, founders: updated });
+                        }}
+                        className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                type="submit"
+                className="flex items-center gap-2 bg-[#F26422] text-white font-black px-8 py-3 rounded-xl text-sm shadow-md transition hover:scale-105"
+              >
+                <Save className="w-4 h-4" />
+                <span>İletişim Bilgilerini Kaydet</span>
+              </button>
+            </div>
+          </form>
         )}
 
       </div>

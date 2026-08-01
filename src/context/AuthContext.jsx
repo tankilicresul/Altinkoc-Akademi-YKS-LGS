@@ -18,15 +18,15 @@ export function AuthProvider({ children }) {
     return null; // default null (anonymous visitor)
   });
 
-  // Registered users list in system (stored locally + synced with Supabase if configured)
+  // Registered users list in system (stored locally + synced with Supabase)
   const [registeredUsers, setRegisteredUsers] = useState(() => {
-    const savedUsers = localStorage.getItem('altin_koc_users_list');
+    const savedUsers = localStorage.getItem('altin_koc_users_list_v2');
     if (savedUsers) {
       try { return JSON.parse(savedUsers); } catch (e) {}
     }
     return [
       {
-        id: 'admin-1',
+        id: 'admin-resul',
         name: 'Resul Tankılıç (Kurucu & Super Admin)',
         email: 'resultankilic.business@gmail.com',
         role: 'admin',
@@ -35,32 +35,11 @@ export function AuthProvider({ children }) {
         createdAt: '2026-08-01',
       },
       {
-        id: 'admin-2',
+        id: 'admin-mirac',
         name: 'Miraç Üresin (Kurucu & Super Admin)',
         email: 'miracuresin3@gmail.com',
         role: 'admin',
         phone: '0543 108 52 56',
-        status: 'Approved',
-        createdAt: '2026-08-01',
-      },
-      {
-        id: 'student-1',
-        name: 'Ahmet Yılmaz',
-        email: 'ahmet@example.com',
-        role: 'student',
-        phone: '0555 123 45 67',
-        field: 'Sayısal',
-        targetRank: 'İlk 500',
-        status: 'Approved',
-        createdAt: '2026-08-01',
-      },
-      {
-        id: 'mentor-1',
-        name: 'Kaan Yıldırım',
-        email: 'kaan@example.com',
-        role: 'mentor',
-        phone: '0555 987 65 43',
-        university: 'Boğaziçi Bilgisayar',
         status: 'Approved',
         createdAt: '2026-08-01',
       },
@@ -76,7 +55,7 @@ export function AuthProvider({ children }) {
   }, [currentUser]);
 
   useEffect(() => {
-    localStorage.setItem('altin_koc_users_list', JSON.stringify(registeredUsers));
+    localStorage.setItem('altin_koc_users_list_v2', JSON.stringify(registeredUsers));
   }, [registeredUsers]);
 
   const checkIsAdmin = (email) => {

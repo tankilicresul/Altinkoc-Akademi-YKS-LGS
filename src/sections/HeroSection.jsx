@@ -2,6 +2,7 @@ import React from 'react';
 import GeometricFrame from '../components/GeometricFrame';
 import EditableText from '../components/EditableText';
 import EditableMedia from '../components/EditableMedia';
+import DynamicSectionContainer from '../components/DynamicSectionContainer';
 import { useSiteConfig } from '../context/SiteConfigContext';
 import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Trophy, Users, Calculator, Sparkles, Star } from 'lucide-react';
@@ -64,6 +65,9 @@ export default function HeroSection({ onOpenApplyModal, onNavigate }) {
               />
             </p>
 
+            {/* Dynamic Container for adding custom videos, images, buttons or text */}
+            <DynamicSectionContainer sectionId="heroLeft" />
+
             {/* University Tags */}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="text-xs font-bold text-slate-500 mr-1">Derece Koçlarımızın Üniversiteleri:</span>
@@ -113,6 +117,9 @@ export default function HeroSection({ onOpenApplyModal, onNavigate }) {
                   <span className="text-slate-700 ml-1">4.9 / 5.0 (500+ Derece Öğrencisi)</span>
                 </div>
               </div>
+
+              {/* Dynamic Container for adding videos, pictures or custom elements in right card */}
+              <DynamicSectionContainer sectionId="heroRightCard" />
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3">
